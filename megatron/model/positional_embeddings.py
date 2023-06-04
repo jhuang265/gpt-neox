@@ -44,23 +44,54 @@ class RotaryEmbedding(torch.nn.Module):
         self.cos_cached = None
         self.sin_cached = None
         self.precision = precision
+        self.base = base
+        self.dim = dim
 
     def forward(self, x, seq_dim=1, seq_len=None):
         if seq_len is None:
             seq_len = x.shape[seq_dim]
         if seq_len != self.seq_len_cached:
             self.seq_len_cached = seq_len
-            t = torch.arange(seq_len, device=x.device).type_as(self.inv_freq)
-            freqs = torch.einsum("i,j->ij", t, self.inv_freq)
+            t = torch.arange(seq_len, device=x.device, dtype=torch.float32)#.type_as(self.inv_freq)
+            freqs = torch.einsum("i,j->ij", t, 1.0 / (self.base ** (torch.arange(0, self.dim, 2).float() / self.dim)).to(x.device))#self.inv_freq)
             emb = torch.cat((freqs, freqs), dim=-1).to(x.device)
             if self.precision == torch.bfloat16:
                 emb = emb.float()
-            self.cos_cached = emb.cos()[:, None, None, :]
-            self.sin_cached = emb.sin()[:, None, None, :]
+            self.cos_cached = emb.cos()[:, None, None, :].half().to(x.device)
+            self.sin_cached = emb.sin()[:, None, None, :].half().to(x.device)
             if self.precision == torch.bfloat16:
                 self.cos_cached = self.cos_cached.bfloat16()
                 self.sin_cached = self.sin_cached.bfloat16()
         return self.cos_cached, self.sin_cached
+
+
+    # def forward(self, x, seq_dim=1, seq_len=None):
+    #     if seq_len is None:
+    #         seq_len = x.shape[seq_dim]
+    #     if seq_len != self.seq_len_cached:
+    #         self.seq_len_cached = seq_len
+    #         # t = torch.arange(seq_len, device=x.device).type_as(self.inv_freq)
+    #         inv_freq = 1.0 / (self.base ** (torch.arange(0, self.dim, 2).float() / self.dim))
+    #         self.register_buffer("inv_freq", inv_freq)
+    #         self.inv_freq = self.inv_freq.to('cpu')
+    #         t = torch.arange(2048, device=self.inv_freq.device, dtype=self.inv_freq.dtype)
+    #         self.t = t.clone()
+    #         freqs = torch.einsum("i,j->ij", t, self.inv_freq)
+    #         self.freqs = freqs.clone()
+    #         emb = torch.cat((freqs, freqs), dim=-1)
+    #         self.emb = emb.clone()
+    #         # print("Neox emb",emb[0,:10])
+    #         # if self.precision == torch.bfloat16:
+    #         #     emb = emb.float()
+    #         emb = emb
+    #         # self.cos_cached = emb.cos()[:seq_len, None, None, :].half().to(x.device)
+    #         # self.sin_cached = emb.sin()[:seq_len, None, None, :].half().to(x.device)
+    #         self.cos_cached = emb.cos()[:seq_len, None, None, :].half().to(x.device)
+    #         self.sin_cached = emb.sin()[:seq_len, None, None, :].half().to(x.device)
+    #         # if self.precision == torch.bfloat16:
+    #         #     self.cos_cached = self.cos_cached.bfloat16()
+    #         #     self.sin_cached = self.sin_cached.bfloat16()
+    #     return self.cos_cached, self.sin_cached
 
 
 # rotary pos emb helpers:
@@ -73,13 +104,16 @@ def rotate_half(x):
     )  # dim=-1 triggers a bug in earlier torch versions
 
 
-@torch.jit.script
+# @torch.jit.script
 def apply_rotary_pos_emb(q, k, cos, sin, offset: int = 0):
     cos, sin = (
         cos[offset : q.shape[0] + offset, ...],
         sin[offset : q.shape[0] + offset, ...],
     )
-    return (q * cos) + (rotate_half(q) * sin), (k * cos) + (rotate_half(k) * sin)
+    return (q * cos) + (rotate_half(q) * sin), (k * cos) + (rotate_half(k) * sin), \
+        {'cos':cos.clone(),'sin':sin.clone(),
+        'rotq':(rotate_half(q) * sin).clone(),'rotk':(rotate_half(k) * sin).clone(),
+        'qcos':(q * cos).clone(),'kcos':(k * cos).clone(),}
 
 
 def apply_rotary_pos_emb_torch(
@@ -89,7 +123,10 @@ def apply_rotary_pos_emb_torch(
         cos[offset : q.shape[0] + offset, ...],
         sin[offset : q.shape[0] + offset, ...],
     )
-    return (q * cos) + (rotate_half(q) * sin), (k * cos) + (rotate_half(k) * sin)
+    return (q * cos) + (rotate_half(q) * sin), (k * cos) + (rotate_half(k) * sin), \
+        {'cos':cos.clone(),'sin':sin.clone(),
+        'rotq':(rotate_half(q) * sin).clone(),'rotk':(rotate_half(k) * sin).clone(),
+        'qcos':(q * cos).clone(),'kcos':(k * cos).clone(),}
 
 
 class AliBi(torch.nn.Module):

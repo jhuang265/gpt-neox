@@ -168,6 +168,8 @@ class FusedScaleMaskSoftmax(nn.Module):
         return False
 
     def forward_fused_softmax(self, input, mask):
+        print("forward_fused_softmax")
+        exit(0)
         b, np, sq, sk = input.size()
         scale = self.scale if self.scale is not None else 1.0
         if self.upper_triang_mask_fusion:
@@ -182,12 +184,15 @@ class FusedScaleMaskSoftmax(nn.Module):
             return ScaledMaskedSoftmax.apply(input, mask, scale)
 
     def forward_torch_softmax(self, input, mask):
+        print("forward_torch_softmax")
+        
         if self.input_in_float16 and self.softmax_in_fp32:
             input = input.float()
 
         if self.scale is not None:
             input = input * self.scale
         mask_output = self.mask_func(input, mask) if mask is not None else input
+        d = {'smx input':mask_output.detach().clone()}
         probs = torch.nn.Softmax(dim=-1)(mask_output)
 
         if self.input_in_float16 and self.softmax_in_fp32:
@@ -196,7 +201,7 @@ class FusedScaleMaskSoftmax(nn.Module):
             else:
                 probs = probs.bfloat16()
 
-        return probs
+        return probs, d
 
     @staticmethod
     def get_batch_per_block(sq, sk, b, np):

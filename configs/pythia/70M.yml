@@ -1,5 +1,5 @@
 {
-  "pipe_parallel_size": 1,
+  "pipe_parallel_size": 0,
   "model_parallel_size": 1,
 
   "num_layers": 6,
@@ -13,9 +13,9 @@
   "gpt_j_residual": true,
   "output_layer_parallelism": "column",
 
-  "attention_config": [[["flash"], 6]],
+  "attention_config": [[["global"], 6]],
 
-  "scaled_upper_triang_masked_softmax_fusion": true,
+  "scaled_upper_triang_masked_softmax_fusion": false,
   "bias_gelu_fusion": true,
 
   "init_method": "small_init",
@@ -42,7 +42,7 @@
     "cpu_offload": false
   },
 
-  "train_micro_batch_size_per_gpu": 32,
+  "train_micro_batch_size_per_gpu": 4,
   "gas": 1,
   "data_impl": "mmap",
   "num_workers": 1,
