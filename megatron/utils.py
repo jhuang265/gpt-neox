@@ -104,6 +104,67 @@ def get_ltor_masks_and_position_ids(
     return attention_mask, loss_mask, position_ids
 
 
+def get_attn_mask_mlm(seq_length, device):
+    """
+    Get triangular attention mask for a given sequence length / device.
+    """
+    # lower triangular attention mask
+    mask = torch.ones((1, seq_length, seq_length), device=device).view(
+        1, 1, seq_length, seq_length
+    )
+
+    # convert to binary
+    return mask > 0.5
+
+
+def get_ltor_masks_and_position_ids_mlm(
+    data,
+    eod_token,
+    mask_token,
+    vocab_size,
+    mlm_probability=0.15,
+    eod_mask_loss=False,
+):
+    """Build masks and position id for left to right model."""
+
+    # Extract batch size and sequence length.
+    batch_size, seq_length = data.size()
+
+    # Attention mask (lower triangular).
+    attention_mask = get_attn_mask_mlm(
+        seq_length=seq_length,
+        device=data.device,
+    )
+
+    probability_matrix = torch.full(data.shape, mlm_probability, device=data.device)
+    special_tokens_mask = (data == eod_token)
+    probability_matrix.masked_fill_(special_tokens_mask, value=0.0)
+    masked_indices = torch.bernoulli(probability_matrix).bool()
+
+    # 80% of the time, we replace masked input tokens with mask_token
+    indices_replaced = torch.bernoulli(torch.full(data.shape, 0.8, device=data.device)).bool() & masked_indices
+    data[indices_replaced] = mask_token
+
+    # 10% of the time, we replace masked input tokens with random word
+    indices_random = torch.bernoulli(torch.full(data.shape, 0.5, device=data.device)).bool() & masked_indices & ~indices_replaced
+    random_words = torch.randint(vocab_size, data.shape, dtype=torch.long, device=data.device)
+    data[indices_random] = random_words[indices_random]
+
+    # Loss mask.
+    loss_mask = torch.ones(data.size(), dtype=torch.float, device=data.device)
+    loss_mask[data != mask_token] = 0.0
+    loss_mask[data == eod_token] = 0.0
+
+    #if eod_mask_loss:
+    #    loss_mask[data == eod_token] = 0.0
+
+    # Position ids.
+    position_ids = torch.arange(seq_length, dtype=torch.long, device=data.device)
+    position_ids = position_ids.unsqueeze(0).expand_as(data)
+
+    return attention_mask, loss_mask, position_ids
+
+
 def local_rank():
     """Local rank of process"""
     local_rank = os.environ.get("LOCAL_RANK")

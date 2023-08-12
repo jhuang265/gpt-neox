@@ -33,7 +33,7 @@ import copy
 from megatron.utils import (
     Timers,
     init_wandb,
-    get_ltor_masks_and_position_ids,
+    get_ltor_masks_and_position_ids, get_ltor_masks_and_position_ids_mlm,
     reduce_losses,
 )
 
@@ -325,6 +325,27 @@ def _get_batch(neox_args, tokenizer, keys, data, datatype):
     return tokens, labels, loss_mask, attention_mask, position_ids
 
 
+def _get_batch_mlm(neox_args, tokenizer, keys, data, datatype):
+    """Support function for get_batch / get_batch pipe (to avoid code repetition)"""
+    data_b = mpu.broadcast_data(keys, data, datatype)
+
+    # Unpack.
+    tokens_ = data_b["text"].long()
+    labels = tokens_[:, :].clone().contiguous()
+    tokens = tokens_[:, :].contiguous()
+
+    # Get the masks and position ids
+    attention_mask, loss_mask, position_ids = get_ltor_masks_and_position_ids_mlm(
+        data=tokens,
+        eod_token=neox_args.tokenizer.eod,
+        mask_token=neox_args.tokenizer.mask,
+        vocab_size=neox_args.tokenizer.vocab_size,
+        eod_mask_loss=neox_args.eod_mask_loss,
+    )
+
+    return tokens, labels, loss_mask, attention_mask, position_ids
+
+
 def get_batch(neox_args, data_iterator):
     """Generate a batch"""
 
@@ -344,6 +365,13 @@ def get_batch(neox_args, data_iterator):
         data=data,
         datatype=datatype,
     )
+    # return _get_batch_mlm(
+    #     neox_args=neox_args,
+    #     tokenizer=neox_args.tokenizer,
+    #     keys=keys,
+    #     data=data,
+    #     datatype=datatype,
+    # )
 
 
 def get_batch_pipe(data, neox_args, curr_scheduler=None):
@@ -355,6 +383,11 @@ def get_batch_pipe(data, neox_args, curr_scheduler=None):
     tokens, labels, loss_mask, attention_mask, position_ids = _get_batch(
         neox_args, neox_args.tokenizer, keys, data, datatype
     )
+
+    # tokens, labels, loss_mask, attention_mask, position_ids = _get_batch_mlm(
+    #     neox_args, neox_args.tokenizer, keys, data, datatype
+    # )
+    
     if curr_scheduler is not None:
         # iteration + 1 to align with how/when DeepSpeed updates the buffers
         curriculum_seqlen = curr_scheduler.update_difficulty(neox_args.iteration + 1)
