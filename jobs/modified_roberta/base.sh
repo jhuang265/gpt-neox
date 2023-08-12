@@ -2,9 +2,9 @@
 #BSUB -nnodes 29
 #BSUB -W 2:00
 #BSUB -q batch
-#BSUB -o logs/gpt_neox-roberta_base-%J.out
-#BSUB -e logs/gpt_neox-roberta_base-%J.err
-#BSUB -J gpt_neox-roberta_base
+#BSUB -o logs/gpt_neox-modified_roberta_base-%J.out
+#BSUB -e logs/gpt_neox-modified_roberta_base-%J.err
+#BSUB -J gpt_neox-modified_roberta_base
 #BSUB -alloc_flags gpudefault
 #BSUB -P CSC499
 
@@ -23,4 +23,4 @@ export DLTS_HOSTFILE=/gpfs/alpine/csc499/scratch/$(whoami)/hostfiles/$LSB_JOBID-
 
 
 python $TRAIN_PATH/deepy.py $TRAIN_PATH/train.py \
-	         --conf_dir $TRAIN_PATH/configs_jerry roberta/roberta_base.yml datasets/train/rp.yml datasets/val/pile_rp.yml roberta_setup.yml
+	         --conf_dir $TRAIN_PATH/configs_jerry modified_roberta/modified_roberta_base.yml datasets/train/rp.yml datasets/val/pile_rp.yml modified_roberta_setup.yml
