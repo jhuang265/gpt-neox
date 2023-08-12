@@ -87,10 +87,10 @@ class ParallelMLP(nn.Module):
         self.bias_gelu_fusion = neox_args.bias_gelu_fusion
 
         # auto scale so geglu has equal parameters
-        ff_mult = 4 * 2 / 3 if self.activation_type == "geglu" else 4
+        ff_mult = 4 * 2 / 3 if (self.activation_type == "geglu" or self.activation_type == "swiglu") else 4
         ff_dim = (
             int(ff_mult * neox_args.hidden_size) * 2
-            if self.activation_type == "geglu"
+            if (self.activation_type == "geglu" or self.activation_type == "swiglu")
             else ff_mult * neox_args.hidden_size
         )
         self.dense_h_to_4h = mpu.ColumnParallelLinear(
@@ -101,7 +101,7 @@ class ParallelMLP(nn.Module):
             init_method=init_method,
             skip_bias_add=True,
         )
-        ff_dim_in = ff_dim // 2 if self.activation_type == "geglu" else ff_dim
+        ff_dim_in = ff_dim // 2 if (self.activation_type == "geglu" or self.activation_type == "swiglu") else ff_dim
         # Project back to h.
         self.dense_4h_to_h = mpu.RowParallelLinear(
             neox_args=neox_args,
