@@ -91,6 +91,13 @@
   #"keep-last-n-checkpoints": 4,
   "wall_clock_breakdown": true,
 
+  # Log metrics
+  "log_grad_norm": true,
+  "log_param_norm": true,
+  "log_optimizer_states": true,
+  "log_grad_pct_zeros": true,
+  "log_gradient_noise_scale": true,
+
   "save": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/roberta_base",
   "load": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/roberta_base",
 
