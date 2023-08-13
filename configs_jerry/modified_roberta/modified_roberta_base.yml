@@ -100,8 +100,8 @@
   "log_grad_pct_zeros": true,
   "log_gradient_noise_scale": true,
 
-  "save": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_modified_roberta_base",
-  "load": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_modified_roberta_base",
+  "save": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_base",
+  #"load": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_base",
 
   #  networking
   #"hostfile": "/mock_path"
