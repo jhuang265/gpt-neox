@@ -628,6 +628,10 @@ class ParallelTransformerLayer(nn.Module):
         super().__init__()
         self.layer_number = layer_number
 
+        self.small_init_embedding = neox_args.small_init_embedding
+        if neox_args.small_init_embedding and self.layer_number == 0:
+            self.small_init_layernorm = norm(eox_args.hidden_size, eps=eps)
+
         norm, eps = get_norm(neox_args)
 
         # Layernorm on the input data.
@@ -696,6 +700,9 @@ class ParallelTransformerLayer(nn.Module):
             # due to a bug, the two layernorms are not tied in GPT-NeoX-20B. This is non-desirable, but
             # we preserve the functionality for backwards compatibility
 
+            if self.small_init_embedding and self.layer_number == 0:
+                x = self.small_init_layernorm(x)
+
             residual = x
             # applies the correct normalization depending on if the norms are tied
             if self.gpt_j_tied:
@@ -742,6 +749,9 @@ class ParallelTransformerLayer(nn.Module):
             # pseudocode:
             # x = x + attn(ln1(x))
             # x = x + mlp(ln2(x))
+
+            if self.small_init_embedding and self.layer_number == 0:
+                x = self.small_init_layernorm(x)
 
             residual = x
 

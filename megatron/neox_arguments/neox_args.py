@@ -228,7 +228,7 @@ class NeoXArgsModel(NeoXArgsTemplate):
     Pad the vocab size to be divisible by this value. This is added for computational efficiency reasons.
     """
 
-    activation: Literal["gelu", "geglu", "relu", "softsign", "swish", "mish"] = "gelu"
+    activation: Literal["gelu", "geglu", "relu", "softsign", "swish", "mish", "swiglu"] = "gelu"
     """
     Activation function to use - choose from ["gelu", "geglu", "relu", "softsign", "swish", "mish"]
     """
@@ -301,6 +301,11 @@ class NeoXArgsModel(NeoXArgsTemplate):
     """
     Init function used on all layers except ff residual outputs - choose from
     ["normal", "scaled_normal", "orthogonal", "scaled_orthogonal", "xavier_uniform", "xavier_normal", "wang_init", "small_init"]
+    """
+
+    small_init_embedding: bool = False
+    """
+    Whether or not to use an additional LayerNorm directly after the embedding layer as the RWKV-LM work.
     """
 
     output_layer_init_method: Literal[
