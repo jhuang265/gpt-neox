@@ -1,6 +1,6 @@
 #!/bin/bash
 #BSUB -nnodes 4
-#BSUB -W 1:00
+#BSUB -W 0:30
 #BSUB -q debug
 #BSUB -o logs/gpt_neox-roberta_base-debug-%J.out
 #BSUB -e logs/gpt_neox-roberta_base-debug-%J.err
