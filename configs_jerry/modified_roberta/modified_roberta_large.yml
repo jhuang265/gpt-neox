@@ -99,4 +99,8 @@
 
   "save": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_large",
   #"load": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_large",
+
+  "use_wandb": true,
+  "wandb_group": "modified_roberta_large",
+  "wandb_team": "jhuang265",
 }

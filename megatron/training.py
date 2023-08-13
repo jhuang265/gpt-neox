@@ -791,7 +791,7 @@ def train_step(neox_args, timers, data_iterator, model, optimizer, lr_scheduler)
                 raise ValueError("Must be using deepspeed to run neox")
             timers("optimizer").stop()
         reduced_loss = {
-            "lm_loss": reduce_losses(losses).mean()
+            "lm_loss": reduce_losses(losses).mean(),
             "lm_accuracy": reduce_losses(accuracy).mean()
         }  # reduces losses across machines for logging
 
