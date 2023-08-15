@@ -54,7 +54,7 @@ from megatron.utils import (
     get_total_params,
     CharCounter,
 )
-from megatron.model.gpt2_model import cross_entropy, accuracy
+from megatron.model.gpt2_model import cross_entropy
 from eval_tasks import run_eval_harness
 
 

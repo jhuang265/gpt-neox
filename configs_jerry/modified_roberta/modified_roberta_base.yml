@@ -101,12 +101,12 @@
   "log_gradient_noise_scale": true,
 
   "save": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_base",
-  #"load": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_base",
+  # "load": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_base",
 
   #  networking
-  #"hostfile": "/mock_path"
+  # "hostfile": "/mock_path"
 
-  "use_wandb": true,
+  # "use_wandb": true,
   "wandb_group": "modified_roberta_base",
   "wandb_team": "jhuang265",
 }

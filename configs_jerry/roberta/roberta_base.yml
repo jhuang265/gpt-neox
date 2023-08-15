@@ -88,7 +88,7 @@
   # logging
   "log-interval": 100,
   "steps_per_print": 10,
-  #"keep-last-n-checkpoints": 4,
+  "keep-last-n-checkpoints": 4,
   "wall_clock_breakdown": true,
 
   # Log metrics
@@ -99,12 +99,12 @@
   "log_gradient_noise_scale": true,
 
   "save": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/roberta_base",
-  "load": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/roberta_base",
+  # "load": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/roberta_base",
 
   #  networking
-  #"hostfile": "/mock_path"
+  # "hostfile": "/mock_path"
 
-  "use_wandb": true,
-  "wandb_group": "roberta_base",
-  "wandb_team": "jhuang265",
+  # "use_wandb": true,
+  # "wandb_group": "roberta_base",
+  # "wandb_team": "jhuang265",
 }

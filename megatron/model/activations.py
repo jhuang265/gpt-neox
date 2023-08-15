@@ -122,7 +122,7 @@ def mish(x):
 
 
 @torch.jit.script
-def swiglu(x)
+def swiglu(x):
     x, gate = x.chunk(2, dim=-1)
     return F.silu(gate) * x
 

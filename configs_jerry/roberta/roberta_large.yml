@@ -45,7 +45,7 @@
   "reduce_scatter": True,
   "reduce_bucket_size": 500000000,
   "contiguous_gradients": True,
-},
+  },
   # batch / data settings
   "train_micro_batch_size_per_gpu": 48,
   "data-impl": "mmap",
@@ -96,9 +96,9 @@
   "log_gradient_noise_scale": true,
 
   "save": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/roberta_large",
-  #"load": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/roberta_large",
+  # "load": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/roberta_large",
 
-  "use_wandb": true,
-  "wandb_group": "roberta_large",
-  "wandb_team": "jhuang265",
+  # "use_wandb": true,
+  # "wandb_group": "roberta_large",
+  # "wandb_team": "jhuang265",
 }

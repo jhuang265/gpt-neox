@@ -1,7 +1,7 @@
 #!/bin/bash
-#BSUB -nnodes 4
+#BSUB -nnodes 1
 #BSUB -W 0:30
-#BSUB -q debug
+#BSUB -q batch
 #BSUB -o logs/gpt_neox-roberta_base-debug-%J.out
 #BSUB -e logs/gpt_neox-roberta_base-debug-%J.err
 #BSUB -J gpt_neox-roberta_base-debug
@@ -9,7 +9,14 @@
 #BSUB -P CSC499
 
 # Set up the environment
-source /gpfs/alpine/csc499/scratch/$(whoami)/setup.sh
+# source ~/.bashrc
+# source /gpfs/alpine/csc499/scratch/$(whoami)/setup.sh
+
+# Activate conda environment
+# source /gpfs/alpine/csc499/scratch/$(whoami)/miniconda3/etc/profile.d/conda.sh
+# conda activate gpt-neox
+# which python
+
 # The default cache location is read-only on Summit. Redirect it to somewhere in your scratch dir
 export TORCH_EXTENSIONS_DIR=/gpfs/alpine/csc499/scratch/$(whoami)/cache
 
@@ -23,4 +30,4 @@ export DLTS_HOSTFILE=/gpfs/alpine/csc499/scratch/$(whoami)/hostfiles/$LSB_JOBID-
 
 
 python $TRAIN_PATH/deepy.py $TRAIN_PATH/train.py \
-	         --conf_dir $TRAIN_PATH/configs_jerry roberta/roberta_base.yml datasets/train/rp.yml datasets/val/pile_rp.yml roberta_setup.yml
+	         --conf_dir $TRAIN_PATH/configs_jerry roberta/roberta_base.yml datasets/train/rp.yml datasets/val/pile_rp.yml debug_setup.yml

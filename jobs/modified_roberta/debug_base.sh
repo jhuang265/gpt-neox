@@ -1,7 +1,7 @@
 #!/bin/bash
-#BSUB -nnodes 4
+#BSUB -nnodes 2
 #BSUB -W 0:30
-#BSUB -q debug
+#BSUB -q batch
 #BSUB -o logs/gpt_neox-modified_roberta_base-debug-%J.out
 #BSUB -e logs/gpt_neox-modified_roberta_base-debug-%J.err
 #BSUB -J gpt_neox-modified_roberta_base-debug
