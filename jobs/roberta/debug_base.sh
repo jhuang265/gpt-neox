@@ -9,8 +9,8 @@
 #BSUB -P CSC499
 
 # Set up the environment
-# source ~/.bashrc
-# source /gpfs/alpine/csc499/scratch/$(whoami)/setup.sh
+source ~/.bashrc
+source /gpfs/alpine/csc499/scratch/$(whoami)/setup.sh
 
 # Activate conda environment
 # source /gpfs/alpine/csc499/scratch/$(whoami)/miniconda3/etc/profile.d/conda.sh

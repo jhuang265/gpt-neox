@@ -1,6 +1,6 @@
 #!/bin/bash
 #BSUB -nnodes 2
-#BSUB -W 0:30
+#BSUB -W 1:30
 #BSUB -q batch
 #BSUB -o logs/gpt_neox-modified_roberta_base-debug-%J.out
 #BSUB -e logs/gpt_neox-modified_roberta_base-debug-%J.err
@@ -10,6 +10,11 @@
 
 # Set up the environment
 source /gpfs/alpine/csc499/scratch/$(whoami)/setup.sh
+
+# Activate Conda environment
+source ~/.bashrc
+conda activate gpt-neox
+
 # The default cache location is read-only on Summit. Redirect it to somewhere in your scratch dir
 export TORCH_EXTENSIONS_DIR=/gpfs/alpine/csc499/scratch/$(whoami)/cache
 
