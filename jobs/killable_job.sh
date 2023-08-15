@@ -23,4 +23,4 @@ export DLTS_HOSTFILE=/gpfs/alpine/csc499/scratch/$(whoami)/hostfiles/$LSB_JOBID-
 
 
 python $TRAIN_PATH/deepy.py $TRAIN_PATH/train.py \
-	         --conf_dir $TRAIN_PATH/configs_jerry redpajama.yaml summit-1-3B_bsz-16.yml summit_setup.yml
+	         --conf_dir $TRAIN_PATH/old_configs redpajama.yaml summit-1-3B_bsz-16.yml summit_setup.yml

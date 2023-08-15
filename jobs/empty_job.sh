@@ -27,4 +27,4 @@ bash /gpfs/alpine/csc499/scratch/$(whoami)/write_hostfile.sh
 export DLTS_HOSTFILE=/gpfs/alpine/csc499/scratch/$(whoami)/hostfiles/$LSB_JOBID-hosts
 
 python $TRAIN_PATH/deepy.py $TRAIN_PATH/train.py \
-                 --conf_dir $TRAIN_PATH/configs_jerry roberta/roberta_base.yml datasets/train/rp.yml datasets/val/pile_rp.yml debug_setup.yml
+                 --conf_dir $TRAIN_PATH/configs_jerry roberta/roberta_base.yml datasets/train/rp.yml datasets/val/pile_rp.yml setup_debug.yml

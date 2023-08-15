@@ -23,4 +23,4 @@ export DLTS_HOSTFILE=/gpfs/alpine/csc499/scratch/$(whoami)/hostfiles/$LSB_JOBID-
 
 
 python $TRAIN_PATH/deepy.py $TRAIN_PATH/train.py \
-	         --conf_dir $TRAIN_PATH/configs_jerry modified_roberta/modified_roberta_large.yml datasets/train/rp.yml datasets/val/pile_rp.yml modified_roberta_setup.yml
+	         --conf_dir $TRAIN_PATH/configs_jerry modified_roberta/modified_roberta_large.yml datasets/train/rp.yml datasets/val/pile_rp.yml setup_modified_roberta.yml
