@@ -628,11 +628,11 @@ class ParallelTransformerLayer(nn.Module):
         super().__init__()
         self.layer_number = layer_number
 
+        norm, eps = get_norm(neox_args)
+
         self.small_init_embedding = neox_args.small_init_embedding
         if neox_args.small_init_embedding and self.layer_number == 0:
             self.small_init_layernorm = norm(eox_args.hidden_size, eps=eps)
-
-        norm, eps = get_norm(neox_args)
 
         # Layernorm on the input data.
         self.input_layernorm = norm(neox_args.hidden_size, eps=eps)
