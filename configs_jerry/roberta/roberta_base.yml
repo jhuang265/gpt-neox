@@ -105,6 +105,6 @@
   # "hostfile": "/mock_path"
 
   # "use_wandb": true,
-  # "wandb_group": "roberta_base",
-  # "wandb_team": "jhuang265",
+  "wandb_group": "roberta_base",
+  "wandb_team": "jhuang265",
 }
