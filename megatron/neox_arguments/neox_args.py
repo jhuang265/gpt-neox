@@ -303,10 +303,10 @@ class NeoXArgsModel(NeoXArgsTemplate):
     ["normal", "scaled_normal", "orthogonal", "scaled_orthogonal", "xavier_uniform", "xavier_normal", "wang_init", "small_init"]
     """
 
-    small_init_embedding: bool = False
-    """
-    Whether or not to use an additional LayerNorm directly after the embedding layer as the RWKV-LM work.
-    """
+    # small_init_embedding: bool = False
+    # """
+    # Whether or not to use an additional LayerNorm directly after the embedding layer as the RWKV-LM work.
+    # """
 
     output_layer_init_method: Literal[
         "normal",
