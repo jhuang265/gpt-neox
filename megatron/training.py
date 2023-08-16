@@ -435,8 +435,8 @@ def forward_step(
     ):
         loss_mask = loss_mask[:, : neox_args.curriculum_seqlen].contiguous()
         labels = labels[:, : neox_args.curriculum_seqlen].contiguous()
-    # loss, accuracy = cross_entropy(
-    loss = cross_entropy(
+    loss, accuracy = cross_entropy(
+    # loss = cross_entropy(
         outputs, (labels, loss_mask), _fp16=neox_args.fp16_lm_cross_entropy
     )
 
@@ -762,7 +762,7 @@ def train_step(neox_args, timers, data_iterator, model, optimizer, lr_scheduler)
         )
     else:
         losses = []
-        # accuracies = []
+        accuracies = []
         for _ in range(neox_args.gradient_accumulation_steps):
             # Forward model for one step.
             timers("forward").start()
