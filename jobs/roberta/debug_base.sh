@@ -14,8 +14,8 @@ source /gpfs/alpine/csc499/scratch/$(whoami)/setup.sh
 
 # Activate conda environment
 # source /gpfs/alpine/csc499/scratch/$(whoami)/miniconda3/etc/profile.d/conda.sh
-# conda activate gpt-neox
-# which python
+conda activate gpt-neox
+which python
 
 # The default cache location is read-only on Summit. Redirect it to somewhere in your scratch dir
 export TORCH_EXTENSIONS_DIR=/gpfs/alpine/csc499/scratch/$(whoami)/cache

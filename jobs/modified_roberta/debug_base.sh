@@ -8,6 +8,10 @@
 #BSUB -alloc_flags gpudefault
 #BSUB -P CSC499
 
+# For WandB Logging
+export WANDB_MODE=offline
+export WANDB_LOCAL=1
+
 # Set up the environment
 source /gpfs/alpine/csc499/scratch/$(whoami)/setup.sh
 

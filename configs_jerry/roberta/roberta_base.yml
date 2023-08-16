@@ -49,7 +49,7 @@
   },
 
   # batch / data settings
-  "train_micro_batch_size_per_gpu": 48,
+  "train_micro_batch_size_per_gpu": 8,
   #"gradient_accumulation_steps": 1,
   "data-impl": "mmap",
 
@@ -94,9 +94,9 @@
   # Log metrics
   "log_grad_norm": true,
   "log_param_norm": true,
-  "log_optimizer_states": true,
+  #"log_optimizer_states": true,
   "log_grad_pct_zeros": true,
-  "log_gradient_noise_scale": true,
+  #"log_gradient_noise_scale": true,
 
   "save": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/roberta_base",
   # "load": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/roberta_base",

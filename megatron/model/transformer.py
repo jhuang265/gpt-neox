@@ -632,7 +632,7 @@ class ParallelTransformerLayer(nn.Module):
 
         self.small_init_embedding = neox_args.small_init_embedding
         if neox_args.small_init_embedding and self.layer_number == 0:
-            self.small_init_layernorm = norm(eox_args.hidden_size, eps=eps)
+            self.small_init_layernorm = norm(neox_args.hidden_size, eps=eps)
 
         # Layernorm on the input data.
         self.input_layernorm = norm(neox_args.hidden_size, eps=eps)
@@ -771,7 +771,7 @@ class ParallelTransformerLayer(nn.Module):
                 )
 
             # output = x + mlp(ln2(x))
-            mlp_output, mlp_bias = self.mlp(
+            mlp_output, mlp_bias, d = self.mlp(
                 self.post_attention_layernorm(attention_output)
             )
             with torch.enable_grad():

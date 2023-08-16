@@ -24,9 +24,10 @@
 
   "tensorboard-dir": "tensorboard",
   "log-dir": "/gpfs/alpine/csc499/scratch/jerry.huang/logs",
-  "use_wandb": true,
+  "use_wandb": false,
   "wandb_host": "https://api.wandb.ai",
   "wandb_project": "neox",
+  #"wandb_init_all_ranks"; true,
 
   "launcher": "jsrun",
   "deepspeed_jsrun": true,
