@@ -435,8 +435,8 @@ def forward_step(
     ):
         loss_mask = loss_mask[:, : neox_args.curriculum_seqlen].contiguous()
         labels = labels[:, : neox_args.curriculum_seqlen].contiguous()
-    loss, accuracy = cross_entropy(
-    # loss = cross_entropy(
+    # loss, accuracy = cross_entropy(
+    loss = cross_entropy(
         outputs, (labels, loss_mask), _fp16=neox_args.fp16_lm_cross_entropy
     )
 
