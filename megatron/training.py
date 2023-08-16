@@ -441,10 +441,10 @@ def forward_step(
     )
 
     if return_logits:
-        return loss, outputs
-    return loss
-        # return loss, accuracy, outputs
-    # return loss, accuracy
+    #     return loss, outputs
+    # return loss
+        return loss, accuracy, outputs
+    return loss, accuracy
 
 
 def get_model(neox_args, use_cache=False):
@@ -766,8 +766,8 @@ def train_step(neox_args, timers, data_iterator, model, optimizer, lr_scheduler)
         for _ in range(neox_args.gradient_accumulation_steps):
             # Forward model for one step.
             timers("forward").start()
-            # loss, accuracy = forward_step(
-            loss = forward_step(
+            loss, accuracy = forward_step(
+            # loss = forward_step(
                 neox_args=neox_args,
                 timers=timers,
                 data_iterator=data_iterator,
@@ -776,7 +776,7 @@ def train_step(neox_args, timers, data_iterator, model, optimizer, lr_scheduler)
             )
             timers("forward").stop()
             losses.append(loss)
-            # accuracies.append(accuracy)
+            accuracies.append(accuracy)
             # Calculate gradients, reduce across processes, and clip.
             timers("backward").start()
             backward_step(
@@ -811,9 +811,9 @@ def train_step_pipe(neox_args, timers, model, data_iterator):
     """Single training step with DeepSpeed's pipeline parallel engine."""
 
     assert neox_args.deepspeed
-    # loss, accuracy = model.train_batch(data_iter=data_iterator)
+    loss, accuracy = model.train_batch(data_iter=data_iterator)
     # loss_dict = {"lm_loss": loss, "lm_accuracy": accuracy}
-    loss = model.train_batch(data_iter=data_iterator)
+    # loss = model.train_batch(data_iter=data_iterator)
     loss_dict = {"lm_loss": loss}
     # Don't break Megatron's timers because we changed code paths.
     for t in [
@@ -988,15 +988,15 @@ def evaluate(
                 else neox_args.gradient_accumulation_steps
             ):
                 # Forward evaluation
-                # loss, accuracy = forward_step_fn(
-                loss = forward_step_fn(
+                loss, accuracy = forward_step_fn(
+                # loss = forward_step_fn(
                     model=model,
                     data_iterator=data_iterator,
                     neox_args=neox_args,
                     timers=timers,
                 )
                 losses.append(loss)
-                # accuracies.append(accuracy)
+                accuracies.append(accuracy)
 
             # When contiguous memory optimizations are enabled, the buffers
             # allocated by the optimizations are deallocated during backward pass

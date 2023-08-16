@@ -71,8 +71,8 @@ def cross_entropy(output, labels, _fp16=False):
     correct = (output.argmax(dim=2) == labels)
     accuracy = torch.sum(correct.view(-1) * loss_mask) / loss_mask.sum()
 
-    return loss
-    # return loss, accuracy
+    # return losss
+    return loss, accuracy
 
 
 def _pre_transformer_block(args):
