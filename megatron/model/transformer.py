@@ -87,10 +87,10 @@ class ParallelMLP(nn.Module):
         self.bias_gelu_fusion = neox_args.bias_gelu_fusion
 
         # auto scale so geglu has equal parameters
-        ff_mult = 4 * 2 / 3 if self.activation_type == "geglu" else 4
+        ff_mult = 4 * 2 / 3 if (self.activation_type == "geglu" or self.activation_type == "swiglu") else 4
         ff_dim = (
             int(ff_mult * neox_args.hidden_size) * 2
-            if self.activation_type == "geglu"
+            if (self.activation_type == "geglu" or self.activation_type == "swiglu")
             else ff_mult * neox_args.hidden_size
         )
         self.dense_h_to_4h = mpu.ColumnParallelLinear(
@@ -101,7 +101,7 @@ class ParallelMLP(nn.Module):
             init_method=init_method,
             skip_bias_add=True,
         )
-        ff_dim_in = ff_dim // 2 if self.activation_type == "geglu" else ff_dim
+        ff_dim_in = ff_dim // 2 if (self.activation_type == "geglu" or self.activation_type == "swiglu") else ff_dim
         # Project back to h.
         self.dense_4h_to_h = mpu.RowParallelLinear(
             neox_args=neox_args,
@@ -630,6 +630,10 @@ class ParallelTransformerLayer(nn.Module):
 
         norm, eps = get_norm(neox_args)
 
+        self.small_init_embedding = neox_args.small_init_embedding
+        if neox_args.small_init_embedding and self.layer_number == 0:
+            self.small_init_layernorm = norm(neox_args.hidden_size, eps=eps)
+
         # Layernorm on the input data.
         self.input_layernorm = norm(neox_args.hidden_size, eps=eps)
         self.use_cache = use_cache
@@ -696,6 +700,9 @@ class ParallelTransformerLayer(nn.Module):
             # due to a bug, the two layernorms are not tied in GPT-NeoX-20B. This is non-desirable, but
             # we preserve the functionality for backwards compatibility
 
+            if self.small_init_embedding and self.layer_number == 0:
+                x = self.small_init_layernorm(x)
+
             residual = x
             # applies the correct normalization depending on if the norms are tied
             if self.gpt_j_tied:
@@ -743,6 +750,9 @@ class ParallelTransformerLayer(nn.Module):
             # x = x + attn(ln1(x))
             # x = x + mlp(ln2(x))
 
+            if self.small_init_embedding and self.layer_number == 0:
+                x = self.small_init_layernorm(x)
+
             residual = x
 
             # x = x + attn(ln1(x))
@@ -761,7 +771,7 @@ class ParallelTransformerLayer(nn.Module):
                 )
 
             # output = x + mlp(ln2(x))
-            mlp_output, mlp_bias = self.mlp(
+            mlp_output, mlp_bias, d = self.mlp(
                 self.post_attention_layernorm(attention_output)
             )
             with torch.enable_grad():

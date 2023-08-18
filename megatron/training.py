@@ -33,7 +33,7 @@ import copy
 from megatron.utils import (
     Timers,
     init_wandb,
-    get_ltor_masks_and_position_ids,
+    get_ltor_masks_and_position_ids, get_ltor_masks_and_position_ids_mlm,
     reduce_losses,
 )
 
@@ -325,6 +325,27 @@ def _get_batch(neox_args, tokenizer, keys, data, datatype):
     return tokens, labels, loss_mask, attention_mask, position_ids
 
 
+def _get_batch_mlm(neox_args, tokenizer, keys, data, datatype):
+    """Support function for get_batch / get_batch pipe (to avoid code repetition)"""
+    data_b = mpu.broadcast_data(keys, data, datatype)
+
+    # Unpack.
+    tokens_ = data_b["text"].long()
+    labels = tokens_[:, :].clone().contiguous()
+    tokens = tokens_[:, :].contiguous()
+
+    # Get the masks and position ids
+    attention_mask, loss_mask, position_ids = get_ltor_masks_and_position_ids_mlm(
+        data=tokens,
+        eod_token=neox_args.tokenizer.eod,
+        mask_token=neox_args.tokenizer.mask,
+        vocab_size=neox_args.tokenizer.vocab_size,
+        eod_mask_loss=neox_args.eod_mask_loss,
+    )
+
+    return tokens, labels, loss_mask, attention_mask, position_ids
+
+
 def get_batch(neox_args, data_iterator):
     """Generate a batch"""
 
@@ -337,7 +358,7 @@ def get_batch(neox_args, data_iterator):
         data = next(data_iterator)
     else:
         data = None
-    return _get_batch(
+    return _get_batch_mlm(
         neox_args=neox_args,
         tokenizer=neox_args.tokenizer,
         keys=keys,
@@ -355,6 +376,11 @@ def get_batch_pipe(data, neox_args, curr_scheduler=None):
     tokens, labels, loss_mask, attention_mask, position_ids = _get_batch(
         neox_args, neox_args.tokenizer, keys, data, datatype
     )
+
+    # tokens, labels, loss_mask, attention_mask, position_ids = _get_batch_mlm(
+    #     neox_args, neox_args.tokenizer, keys, data, datatype
+    # )
+    
     if curr_scheduler is not None:
         # iteration + 1 to align with how/when DeepSpeed updates the buffers
         curriculum_seqlen = curr_scheduler.update_difficulty(neox_args.iteration + 1)
@@ -402,12 +428,16 @@ def forward_step(
     ):
         loss_mask = loss_mask[:, : neox_args.curriculum_seqlen].contiguous()
         labels = labels[:, : neox_args.curriculum_seqlen].contiguous()
+    # loss, accuracy = cross_entropy(
     loss = cross_entropy(
         outputs, (labels, loss_mask), _fp16=neox_args.fp16_lm_cross_entropy
     )
+
     if return_logits:
         return loss, outputs
     return loss
+    #     return loss, accuracy, outputs
+    # return loss, accuracy
 
 
 def get_model(neox_args, use_cache=False):
@@ -725,9 +755,11 @@ def train_step(neox_args, timers, data_iterator, model, optimizer, lr_scheduler)
         )
     else:
         losses = []
+        accuracies = []
         for _ in range(neox_args.gradient_accumulation_steps):
             # Forward model for one step.
             timers("forward").start()
+            # loss, accuracy = forward_step(
             loss = forward_step(
                 neox_args=neox_args,
                 timers=timers,
@@ -737,6 +769,7 @@ def train_step(neox_args, timers, data_iterator, model, optimizer, lr_scheduler)
             )
             timers("forward").stop()
             losses.append(loss)
+            # accuracies.append(accuracy)
             # Calculate gradients, reduce across processes, and clip.
             timers("backward").start()
             backward_step(
@@ -755,7 +788,8 @@ def train_step(neox_args, timers, data_iterator, model, optimizer, lr_scheduler)
                 raise ValueError("Must be using deepspeed to run neox")
             timers("optimizer").stop()
         reduced_loss = {
-            "lm_loss": reduce_losses(losses).mean()
+            "lm_loss": reduce_losses(losses).mean(),
+            # "lm_accuracy": reduce_losses(accuracy).mean()
         }  # reduces losses across machines for logging
 
     if neox_args.precision == "fp16" and model.optimizer.overflow:
@@ -770,6 +804,8 @@ def train_step_pipe(neox_args, timers, model, data_iterator):
     """Single training step with DeepSpeed's pipeline parallel engine."""
 
     assert neox_args.deepspeed
+    # loss, accuracy = model.train_batch(data_iter=data_iterator)
+    # loss_dict = {"lm_loss": loss, "lm_accuracy": accuracy}
     loss = model.train_batch(data_iter=data_iterator)
     loss_dict = {"lm_loss": loss}
     # Don't break Megatron's timers because we changed code paths.
@@ -921,6 +957,7 @@ def evaluate(
     # Turn on evaluation mode which disables dropout.
     model.eval()
     losses = []
+    accuracies = []
     if neox_args.char_level_ppl:
         data_iterator = CharCounter(data_iterator, neox_args.tokenizer)
 
@@ -944,6 +981,7 @@ def evaluate(
                 else neox_args.gradient_accumulation_steps
             ):
                 # Forward evaluation
+                # loss, accuracy = forward_step_fn(
                 loss = forward_step_fn(
                     model=model,
                     data_iterator=data_iterator,
@@ -951,6 +989,7 @@ def evaluate(
                     timers=timers,
                 )
                 losses.append(loss)
+                # accuracies.append(accuracy)
 
             # When contiguous memory optimizations are enabled, the buffers
             # allocated by the optimizations are deallocated during backward pass
@@ -960,6 +999,7 @@ def evaluate(
                 deepspeed.checkpointing.reset()
 
     # reduces losses across processes for logging & run eval harness tasks
+    # eval_results = {"lm_loss": reduce_losses(losses).mean().item(), "lm_accuracy": reduce_losses(accuracies).mean().item()}
     eval_results = {"lm_loss": reduce_losses(losses).mean().item()}
     eval_results["lm_loss_ppl"] = math.exp(eval_results["lm_loss"])
 

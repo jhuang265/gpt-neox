@@ -130,6 +130,47 @@ class GMLPBlock(nn.Module):
             skip_bias_add=True,
         )
 
+
+        # super().__init__()
+        # self.layer_number = layer_number
+
+        # ff_dim = neox_args.hidden_size * ff_mult
+
+        # if neox_args.activation == "swiglu":
+        #     ff_out = int(ff_dim * 2/3)
+        #     ff_in = 2 * ff_out
+        # else:
+        #     ff_in = ff_dim
+        #     ff_out = neox_args.hidden_size
+
+        # norm, eps = get_norm(neox_args)
+        # self.norm = norm(neox_args.hidden_size, eps=eps)
+        # self.input_linear = mpu.ColumnParallelLinear(
+        #     neox_args=neox_args,
+        #     input_size=neox_args.hidden_size,
+        #     output_size=ff_in,
+        #     gather_output=False,
+        #     init_method=init_method,
+        #     skip_bias_add=True,
+        # )
+        # self.activation_func = get_activation(neox_args)
+        # ff_dim_parallel = mpu.divide(ff_dim, mpu.get_model_parallel_world_size())
+        # if neox_args.attention_config[layer_number] == "amlp":
+        #     d_attn = neox_args.gmlp_attn_dim
+        # else:
+        #     d_attn = None
+        # self.sgu = SpatialGatingUnit(
+        #     neox_args, ff_dim_parallel, d_attn, causal=True, mask_fn=mask_fn
+        # )
+        # self.output_linear = mpu.RowParallelLinear(
+        #     neox_args=neox_args,
+        #     input_size=ff_out,
+        #     output_size=neox_args.hidden_size,
+        #     input_is_parallel=True,
+        #     init_method=output_layer_init_method,
+        #     skip_bias_add=True,
+        # )
+
     def forward(self, args):
         assert len(args) == 2, "GMLPBlock expects 2 arguments"
         x, attention_mask = args
