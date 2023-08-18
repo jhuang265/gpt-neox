@@ -8,16 +8,16 @@
   "tokenizer-type": "HFTokenizer",
   "vocab-file": "/gpfs/alpine/csc499/scratch/btherien/gpt-neox/data/20B_tokenizer.json",
 
-  "save": "/gpfs/alpine/csc499/scratch/btherien/gpt-neox/checkpoints/continued_pretraining",
+  "save": "/gpfs/alpine/csc499/scratch/btherien/gpt-neox/checkpoints/masked_language_modeling",
   # "load": "/gpfs/alpine/csc499/scratch/btherien/neox_converted/mp1_pp1/pythia",
 
   "checkpoint_validation_with_forward_pass": False,
 
-  "tensorboard-dir": "tensorboard/continued_pretraining",
-  "log-dir": "/gpfs/alpine/csc499/scratch/btherien/gpt-neox/logs/continued_pretraining",
+  "tensorboard-dir": "tensorboard/masked_language_modeling",
+  "log-dir": "/gpfs/alpine/csc499/scratch/btherien/gpt-neox/logs/masked_language_modeling",
   "use_wandb": False,
   # "wandb_host": "https://api.wandb.ai",
-  "wandb_project": "continued_pretraining",
+  "wandb_project": "masked_language_modeling",
 
   "launcher": "jsrun",
   "deepspeed_jsrun": true,
