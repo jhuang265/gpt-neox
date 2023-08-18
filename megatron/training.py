@@ -358,20 +358,13 @@ def get_batch(neox_args, data_iterator):
         data = next(data_iterator)
     else:
         data = None
-    return _get_batch(
+    return _get_batch_mlm(
         neox_args=neox_args,
         tokenizer=neox_args.tokenizer,
         keys=keys,
         data=data,
         datatype=datatype,
     )
-    # return _get_batch_mlm(
-    #     neox_args=neox_args,
-    #     tokenizer=neox_args.tokenizer,
-    #     keys=keys,
-    #     data=data,
-    #     datatype=datatype,
-    # )
 
 
 def get_batch_pipe(data, neox_args, curr_scheduler=None):

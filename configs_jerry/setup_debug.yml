@@ -27,7 +27,7 @@
   "use_wandb": false,
   "wandb_host": "https://api.wandb.ai",
   "wandb_project": "neox",
-  #"wandb_init_all_ranks"; true,
+  "wandb_init_all_ranks"; true,
 
   "launcher": "jsrun",
   "deepspeed_jsrun": true,
