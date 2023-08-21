@@ -17,7 +17,7 @@ tmp = "\"/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/roberta_ba
 
 file_contents = "{\n\"load\":" + tmp + "\n}"
 
-with open("/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/configs/load_ben/debug_mlm.yml",'w') as f:
+with open("/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/configs_mlm/load_ben/debug_mlm.yml",'w') as f:
   f.write(file_contents)
 
 #Change job script
