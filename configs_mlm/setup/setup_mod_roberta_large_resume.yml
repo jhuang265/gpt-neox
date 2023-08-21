@@ -1,0 +1,27 @@
+# Suggested data paths when using GPT-NeoX locally
+{
+  # If weight_by_num_documents is True, Builds dataset weights from a multinomial distribution over groups of data according to the number of documents in each group.
+  # WARNING: setting this to True will override any user provided weights
+  # "weight_by_num_documents": false,
+  # "weighted_sampler_alpha": 0.3,
+
+  "tokenizer-type": "HFTokenizer",
+  "vocab-file": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/data/gpt2_tokenizer.json",
+
+  "save": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/mod_roberta_large_mlm",
+  # "load": "/gpfs/alpine/csc499/scratch/jerry.huang/neox_converted/mp1_pp1/pythia",
+
+  "checkpoint_validation_with_forward_pass": False,
+
+  "tensorboard-dir": "tensorboard/mod_roberta_large_mlm",
+  "log-dir": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/mod_roberta_large_mlm",
+  "use_wandb": False,
+  # "wandb_host": "https://api.wandb.ai",
+  "wandb_project": "mod_roberta_large_mlm",
+
+  "launcher": "jsrun",
+  "deepspeed_jsrun": true,
+  "num_workers": 1,
+
+  "finetune": False,
+}

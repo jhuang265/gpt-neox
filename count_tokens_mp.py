@@ -25,7 +25,7 @@ def process_file(f):
     dataset_path = os.path.join(data_path, dir_name, f[:-len('.bin')])
     return dataset_path, get_num_tokens(dataset_path)
 
-data_path = '/gpfs/alpine/csc499/scratch/btherien/data/SlimPajama_split/tokenized_train'
+data_path = '/gpfs/alpine/csc499/scratch/jerry.huang/data/SlimPajama_split/tokenized_train'
 
 dirs = os.listdir(data_path)
 dataset_map = {}

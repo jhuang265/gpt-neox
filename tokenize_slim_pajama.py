@@ -4,8 +4,8 @@ import argparse
 #get args for min and max file number
 parser = argparse.ArgumentParser()
 
-parser.add_argument('--filepath', type=str, default="/gpfs/alpine/csc499/scratch/btherien/data/SlimPajama_split/test")
-parser.add_argument('--tok-filepath', type=str, default="/gpfs/alpine/csc499/scratch/btherien/data/SlimPajama_split/tokenized_test")
+parser.add_argument('--filepath', type=str, default="/gpfs/alpine/csc499/scratch/jerry.huang/data/SlimPajama_split/test")
+parser.add_argument('--tok-filepath', type=str, default="/gpfs/alpine/csc499/scratch/jerry.huang/data/SlimPajama_split/tokenized_test")
 parser.add_argument('--dryrun', action='store_true')
 parser.add_argument('--start', type=float,)
 parser.add_argument('--end', type=float,)

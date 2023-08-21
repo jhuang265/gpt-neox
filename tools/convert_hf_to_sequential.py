@@ -47,14 +47,14 @@ CUDA_VISIBLE_DEVICES=0 python tools/convert_hf_to_sequential.py \
     --deduped
 
 
-/gpfs/alpine/csc499/scratch/btherien
+/gpfs/alpine/csc499/scratch/jerry.huang
 
 Example usage[SUMMIT]: (Converts the 70M Pythia model to NeoX format)
 ================================================================
 CUDA_VISIBLE_DEVICES=0 python tools/convert_hf_to_sequential.py \
     --size 70m \
     --revision 143000 \
-    --output-dir /gpfs/alpine/csc499/scratch/btherien/neox_converted/pythia/70m \
+    --output-dir /gpfs/alpine/csc499/scratch/jerry.huang/neox_converted/pythia/70m \
     --cache-dir /gpfs/alpine/csc499/proj-shared/hf_checkpoints \
     --config configs/pythia/70M.yml configs/local_setup.yml \
     --test \
@@ -65,7 +65,7 @@ CUDA_VISIBLE_DEVICES=0 python tools/convert_hf_to_sequential.py \
 Example usage[SUMMIT]: (Converts the 70M Pythia model to NeoX format)
 ================================================================
 CUDA_VISIBLE_DEVICES=0 python tools/convert_hf_to_sequential.py \
-    --output-dir /gpfs/alpine/csc499/scratch/btherien/neox_converted/mp1_pp1/pythia/410m \
+    --output-dir /gpfs/alpine/csc499/scratch/jerry.huang/neox_converted/mp1_pp1/pythia/410m \
     --cache-dir /gpfs/alpine/csc499/proj-shared/hf_checkpoints \
     --config configs/llama/410M.yml configs/local_setup.yml \
     --test \
@@ -79,7 +79,7 @@ Example usage[SUMMIT]: (Converts the 70M Pythia model to NeoX format)
 OMPI_COMM_WORLD_RANK=1 CUDA_VISIBLE_DEVICES=0 python tools/convert_hf_to_sequential.py \
     --hf-model-name pythia-410m-v0 \
     --revision 143000 \
-    --output-dir /gpfs/alpine/csc499/scratch/btherien/neox_converted/mp1_pp1/pythia/410m \
+    --output-dir /gpfs/alpine/csc499/scratch/jerry.huang/neox_converted/mp1_pp1/pythia/410m \
     --cache-dir /gpfs/alpine/csc499/proj-shared/hf_checkpoints \
     --config configs/llama/410M.yml configs/local_setup_llama.yml \
     --test 
@@ -93,15 +93,15 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 python ./deepy.py tools/convert_hf_to_sequential.py
 
 
 simple download script:
-python tools/convert_hf_to_sequential.py --download-only --cache-dir /gpfs/alpine/csc499/scratch/btherien/hf_checkpoints --hf-model-name pythia-410m-deduped-v0 --revision 143000
+python tools/convert_hf_to_sequential.py --download-only --cache-dir /gpfs/alpine/csc499/scratch/jerry.huang/hf_checkpoints --hf-model-name pythia-410m-deduped-v0 --revision 143000
 """
 
 MULTI_GPU_ARGS = " ".join(
         [
             "--hf-model-name pythia-410m-deduped-v0",
             "--revision 10000",
-            "--output-dir /gpfs/alpine/csc499/scratch/btherien/neox_converted/mp1_pp1/pythia/410m_deduped",
-            "--cache-dir /gpfs/alpine/csc499/scratch/btherien/hf_checkpoints",
+            "--output-dir /gpfs/alpine/csc499/scratch/jerry.huang/neox_converted/mp1_pp1/pythia/410m_deduped",
+            "--cache-dir /gpfs/alpine/csc499/scratch/jerry.huang/hf_checkpoints",
             "--config configs/llama/410M.yml configs/local_setup_llama.yml schedules/adam_cosine_lr3e-4_3e-5_wu-001.yml",
             "--test"
         ]
@@ -463,7 +463,7 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "--ckpt-tmp-dir",
-        default="/gpfs/alpine/csc499/scratch/btherien/ckpt-tmp",
+        default="/gpfs/alpine/csc499/scratch/jerry.huang/ckpt-tmp",
         help="Directory to store cached hugging face checkpoints."
     )
     #enable running on summit 

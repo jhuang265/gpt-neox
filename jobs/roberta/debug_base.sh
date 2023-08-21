@@ -13,7 +13,7 @@ source ~/.bashrc
 source /gpfs/alpine/csc499/scratch/$(whoami)/setup.sh
 
 # Activate conda environment
-# source /gpfs/alpine/csc499/scratch/$(whoami)/miniconda3/etc/profile.d/conda.sh
+# source /gpfs/alpine/csc499/scratch/jerry.huang/miniconda3/etc/profile.d/conda.sh
 conda activate gpt-neox
 which python
 

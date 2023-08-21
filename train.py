@@ -27,8 +27,6 @@ if __name__ == "__main__":
     neox_args.configure_distributed_args()
     neox_args.build_tokenizer()  # tokenizer needs to be build in training in order to set the padding vocab
 
-    # print('NeoX Arguments:', neox_args)
-
     # dir_str = "JOB-{}_{}-iters-{}_warmup-{}_max-lr-{}_min-lr-{}_{}".format(
     #     os.environ['LSB_JOBID'],
     #     neox_args.identifier_string,
@@ -56,8 +54,8 @@ if __name__ == "__main__":
     
     # neox_args.tensorboard_dir = os.path.join(neox_args.tensorboard_dir, dir_str)
     # neox_args.save = os.path.join(neox_args.save, dir_str)
-    # print("NEOX ARGS tensorboard_dir: ", neox_args.tensorboard_dir)
-    # print("NEOX ARGS save: ", neox_args.save)
+    print("NEOX ARGS tensorboard_dir: ", neox_args.tensorboard_dir)
+    print("NEOX ARGS save: ", neox_args.save)
     # exit(0)
     neox_args.initialize_tensorboard_writer()  # is initialized if tensorboard directory is defined
 

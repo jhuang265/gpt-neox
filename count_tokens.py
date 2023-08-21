@@ -22,11 +22,11 @@ class SilenceStdout:
 parser = argparse.ArgumentParser()
 parser.add_argument("--outer-dir", 
                     help="the file name to read", 
-                    default='/gpfs/alpine/csc499/scratch/btherien/data/SlimPajama_split/tokenized_train')
+                    default='/gpfs/alpine/csc499/scratch/jerry.huang/data/SlimPajama_split/tokenized_train')
 
 parser.add_argument("--jsonl-file-name", 
                     help="the file name to read", 
-                    default='/gpfs/alpine/csc499/scratch/btherien/data/SlimPajama_split/test/ArXiv/data_0_time1690516559_slimpajama0.jsonl')
+                    default='/gpfs/alpine/csc499/scratch/jerry.huang/data/SlimPajama_split/test/ArXiv/data_0_time1690516559_slimpajama0.jsonl')
 
 parser.add_argument("--output-file", 
                     help="the file name to write", 

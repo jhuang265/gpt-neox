@@ -101,7 +101,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     
-    with open('/gpfs/alpine/csc499/scratch/btherien/gpt-neox/dataset_map.json') as f:
+    with open('/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/dataset_map.json') as f:
         dataset_map = json.load(f)
 
 
@@ -171,12 +171,12 @@ if __name__ == '__main__':
 
 """
 python tools/make_dataset.py \
---orig-dataset-dir /gpfs/alpine/csc499/scratch/btherien/data/SlimPajama_split/tokenized_train \
+--orig-dataset-dir /gpfs/alpine/csc499/scratch/jerry.huang/data/SlimPajama_split/tokenized_train \
 --new-dataset-dir /gpfs/alpine/csc499/proj-shared/incite_datasets/slim_pajama_split/tokenized_train_75B \
 --size 75 \
 --dryrun
 
-python tools/make_dataset.py --orig-dataset-dir /gpfs/alpine/csc499/scratch/btherien/data/SlimPajama_split/tokenized_train \
+python tools/make_dataset.py --orig-dataset-dir /gpfs/alpine/csc499/scratch/jerry.huang/data/SlimPajama_split/tokenized_train \
 --new-dataset-dir /gpfs/alpine/csc499/proj-shared/incite_datasets/slim_pajama_split/tokenized_train_150B \
 --size 150 \
 
