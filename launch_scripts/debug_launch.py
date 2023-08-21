@@ -25,8 +25,8 @@ job_script_contents="""#!/bin/bash
 #BSUB -nnodes 29
 #BSUB -W 2:00
 #BSUB -q batch
-#BSUB -o /gpfs/alpine/csc499/scratch/jerry.huang/logs/debug_roberta_base_mlm_out.%J
-#BSUB -e /gpfs/alpine/csc499/scratch/jerry.huang/logs/debug_roberta_base_mlm_err.%J
+#BSUB -o /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/debug_roberta_base_mlm_out.%J
+#BSUB -e /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/debug_roberta_base_mlm_err.%J
 #BSUB -J debug_roberta_base_mlm
 #BSUB -alloc_flags gpudefault
 #BSUB -P CSC499
@@ -50,7 +50,7 @@ cd $TRAIN_PATH
 
 # Kill previous job and setup next job pickup
 bkill {}
-python /gpfs/alpine/csc499/scratch/jerry.huang/future_launch.py --job-id $LSB_JOBID &
+python /gpfs/alpine/csc499/scratch/jerry.huang/debug_launch.py --job-id $LSB_JOBID &
 
 # Write the hostfile for this job
 bash /gpfs/alpine/csc499/scratch/jerry.huang/write_hostfile.sh
@@ -61,7 +61,7 @@ setup/setup_roberta_base_resume.yml \
 roberta/roberta_base.yml \
 datasets_ben/val/pile_slimp.yml \
 datasets_ben/train/slim_pajama.yml \
-load_ben/debug.yml \
+load_ben/debug_mlm.yml \
 """.format(args.job_id, args.job_id)
 
 job_script_path = "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/jobs/debug_roberta_base_mlm.sh"
