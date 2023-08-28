@@ -11,7 +11,7 @@ args = parser.parse_args()
 
 # sleep 60 minutes to allow training to start
 if not args.no_sleep:
-  time.sleep(10 * 60)
+  time.sleep(60 * 60)
 
 tmp = "\"/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/roberta_base/\"".format(args.job_id)
 
@@ -25,8 +25,8 @@ job_script_contents="""#!/bin/bash
 #BSUB -nnodes 29
 #BSUB -W 2:00
 #BSUB -q batch
-#BSUB -o /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/debug_roberta_base_mlm_out.%J
-#BSUB -e /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/debug_roberta_base_mlm_err.%J
+#BSUB -o /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/debug_roberta_base_mlm-%J.out
+#BSUB -e /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/debug_roberta_base_mlm-%J.err
 #BSUB -J debug_roberta_base_mlm
 #BSUB -alloc_flags gpudefault
 #BSUB -P CSC499
@@ -50,21 +50,27 @@ cd $TRAIN_PATH
 
 # Kill previous job and setup next job pickup
 bkill {}
-python /gpfs/alpine/csc499/scratch/jerry.huang/debug_launch.py --job-id $LSB_JOBID &
+python /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/launch_scripts/debug_launch.py --job-id $LSB_JOBID &
+PYTHON_PID=$!
+echo "Hidden ID: $PYTHON_PID"
 
 # Write the hostfile for this job
 bash /gpfs/alpine/csc499/scratch/jerry.huang/write_hostfile.sh
 export DLTS_HOSTFILE=/gpfs/alpine/csc499/scratch/jerry.huang/hostfiles/$LSB_JOBID-hosts
 
+# Write a file just to ensure we can track all jobs
+echo -e "$LSB_JOBID" >> $TRAIN_PATH/info/$LSB_JOBNAME.info
+
+# Run
 python $TRAIN_PATH/deepy.py $TRAIN_PATH/train.py --conf_dir $TRAIN_PATH/configs_mlm \
 setup/setup_roberta_base_resume.yml \
 roberta/roberta_base.yml \
 datasets_ben/val/pile_slimp.yml \
-datasets_ben/train/slim_pajama.yml \
+datasets_ben/train/slim_pajama_606B.yml \
 load_ben/debug_mlm.yml \
 """.format(args.job_id, args.job_id)
 
-job_script_path = "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/jobs/debug_roberta_base_mlm.sh"
+job_script_path = "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/jobs/debug_roberta_base_mlm_recurring.sh"
 with open(job_script_path,'w') as f:
   f.write(job_script_contents)
 

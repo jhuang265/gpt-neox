@@ -1,10 +1,10 @@
 #!/bin/bash
-#BSUB -nnodes 29
-#BSUB -W 2:00
+#BSUB -nnodes 2
+#BSUB -W 0:30
 #BSUB -q batch
-#BSUB -o /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/debug_roberta_base_mlm-%J.out
-#BSUB -e /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/debug_roberta_base_mlm-%J.err
-#BSUB -J debug_roberta_base_mlm
+#BSUB -o /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/debug_roberta_base_mlm-short-%J.out
+#BSUB -e /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/debug_roberta_base_mlm-short-%J.err
+#BSUB -J debug_roberta_base_mlm-short
 #BSUB -alloc_flags gpudefault
 #BSUB -P CSC499
 #BSUB -N jerry.huang@mila.quebec
@@ -29,10 +29,4 @@ cd $TRAIN_PATH
 bash /gpfs/alpine/csc499/scratch/jerry.huang/write_hostfile.sh
 export DLTS_HOSTFILE=/gpfs/alpine/csc499/scratch/jerry.huang/hostfiles/$LSB_JOBID-hosts
 
-# Write a file just to ensure we can track all jobs
-mkdir -p $TRAIN_PATH/info/
-touch $TRAIN_PATH/info/$LSB_JOBNAME.info
-echo -e "$LSB_JOBID" >> $TRAIN_PATH/info/$LSB_JOBNAME.info
-
-# Run
-python $TRAIN_PATH/deepy.py $TRAIN_PATH/train.py --conf_dir $TRAIN_PATH/configs_mlm setup/setup_roberta_base_resume.yml roberta/roberta_base.yml datasets_ben/val/pile_slimp.yml datasets_ben/train/slim_pajama_606B.yml load_ben/none.yml 
+python $TRAIN_PATH/deepy.py $TRAIN_PATH/train.py --conf_dir $TRAIN_PATH/configs_mlm setup/setup_roberta_base_resume.yml roberta/roberta_base.yml datasets_ben/val/slimp.yml datasets_ben/train/slim_pajama_606B.yml load_ben/none.yml 

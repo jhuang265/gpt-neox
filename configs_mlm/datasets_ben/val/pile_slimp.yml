@@ -1,10 +1,10 @@
 {
-  "test-data-paths": ["/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/data/pile/test/pile_test_text_document"],
+  "test-data-paths": ["/gpfs/alpine/csc499/proj-shared/incite_datasets/red_pajama_data/the_pile/test_tokenized_text_document"],
   "test-data-weights": [
     1.
   ],
   "valid-data-paths": [
-    ["/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/data/pile/val/pile_val_text_document"],
+    ["/gpfs/alpine/csc499/proj-shared/incite_datasets/red_pajama_data/the_pile/val_tokenized_text_document"],
     ["/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/data/slim_pajama/val/all/sp_val"],
   ],
   "valid-data-weights": [

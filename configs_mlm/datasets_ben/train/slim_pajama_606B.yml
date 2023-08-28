@@ -7,7 +7,8 @@
     '/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/data/slim_pajama/train_606B/Wikipedia/Wikipedia',
     '/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/data/slim_pajama/train_606B/Github/Github',
     '/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/data/slim_pajama/train_606B/StackExchange/StackExchange',
-    '/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/data/slim_pajama/train_606B/CommonCrawl/CommonCrawl',],
+    '/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/data/slim_pajama/train_606B/CommonCrawl/CommonCrawl'
+  ],
   "train-data-weights": [
     4.576447650075095,
     4.198505982426652,
@@ -18,3 +19,4 @@
     52.00971279439528
   ],
 }
+
