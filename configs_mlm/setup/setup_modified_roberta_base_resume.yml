@@ -5,8 +5,10 @@
   # "weight_by_num_documents": false,
   # "weighted_sampler_alpha": 0.3,
 
-  "tokenizer-type": "HFTokenizer",
-  "vocab-file": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/data/gpt2_tokenizer.json",
+  # "tokenizer-type": "HFTokenizer",
+  # "vocab-file": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/data/gpt2_tokenizer.json",
+  "merge-file": "data/gpt2-merges.txt",
+  "vocab-file": "data/gpt2-with-mask-vocab.json",
 
   # "save": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_base_mlm",
   # "load": "/gpfs/alpine/csc499/scratch/jerry.huang/neox_converted/mp1_pp1/pythia",
