@@ -1,27 +1,4 @@
-import time
-import os
-import argparse
-
-
-parser = argparse.ArgumentParser()
-parser.add_argument("--job-id", type=int, required=True)
-parser.add_argument("--no-sleep", action='store_true',default=False)
-args = parser.parse_args()
-
-
-# sleep 60 minutes to allow training to start
-if not args.no_sleep:
-  time.sleep(60 * 60)
-
-tmp = "\"/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_base_2048_mlm/\"".format(args.job_id)
-
-file_contents = "{\n\"load\":" + tmp + "\n}"
-
-with open("/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/configs_mlm/load_ben/modified_roberta_base_2048_mlm.yml",'w') as f:
-  f.write(file_contents)
-
-#Change job script
-job_script_contents="""#!/bin/bash
+#!/bin/bash
 #BSUB -nnodes 87
 #BSUB -W 6:00
 #BSUB -q batch
@@ -63,19 +40,8 @@ echo -e "$LSB_JOBID" >> $TRAIN_PATH/info/$LSB_JOBNAME.info
 
 # Run
 python $TRAIN_PATH/deepy.py $TRAIN_PATH/train.py --conf_dir $TRAIN_PATH/configs_mlm \
-setup/setup_modified_roberta_base_2048_resume.yml \
-modified_roberta_2048/modified_roberta_base_2048.yml \
-datasets_ben/val/pile_slimp.yml \
-datasets_ben/train/slim_pajama_606B.yml \
-load_ben/modified_roberta_base_2048_mlm.yml \
-""".format(args.job_id, args.job_id)
-
-job_script_path = "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/jobs/modified_roberta_base_2048_mlm-recurring.sh"
-with open(job_script_path,'w') as f:
-  f.write(job_script_contents)
-
-# sleep 4 hours before submitting a new job
-if not args.no_sleep:
-  time.sleep(4 * 60 * 60)
-
-os.system("bsub {}".format(job_script_path))
+	setup/setup_modified_roberta_base_2048_resume.yml \
+	modified_roberta_2048/modified_roberta_base_2048.yml \
+	datasets_ben/val/pile_slimp.yml \
+	datasets_ben/train/slim_pajama_606B.yml \
+	load_ben/modified_roberta_base_2048_mlm.yml \

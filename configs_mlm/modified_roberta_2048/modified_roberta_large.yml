@@ -50,7 +50,7 @@
   "contiguous_gradients": True,
 },
   # batch / data settings
-  "train_micro_batch_size_per_gpu": 48,
+  "train_micro_batch_size_per_gpu": 16,
   "data-impl": "mmap",
 
   # activation checkpointing
