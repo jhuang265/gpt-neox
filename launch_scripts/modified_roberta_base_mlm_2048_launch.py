@@ -11,7 +11,7 @@ args = parser.parse_args()
 
 # sleep 60 minutes to allow training to start
 if not args.no_sleep:
-  time.sleep(60 * 60)
+  time.sleep(90 * 60)
 
 tmp = "\"/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_base_2048_mlm/\"".format(args.job_id)
 

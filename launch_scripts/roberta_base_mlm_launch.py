@@ -11,7 +11,7 @@ args = parser.parse_args()
 
 # sleep 60 minutes to allow training to start
 if not args.no_sleep:
-  time.sleep(30 * 60)
+  time.sleep(90 * 60)
 
 tmp = "\"/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/roberta_base_mlm/\"".format(args.job_id)
 
@@ -22,8 +22,8 @@ with open("/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/configs_mlm/load_ben
 
 #Change job script
 job_script_contents="""#!/bin/bash
-#BSUB -nnodes 34
-#BSUB -W 2:00
+#BSUB -nnodes 46
+#BSUB -W 6:00
 #BSUB -q batch
 #BSUB -o /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/roberta_base_mlm-%J.out
 #BSUB -e /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/roberta_base_mlm-%J.err
@@ -76,6 +76,6 @@ with open(job_script_path,'w') as f:
 
 # sleep 4 hours before submitting a new job
 if not args.no_sleep:
-  time.sleep(75 * 60)
+  time.sleep(4 * 60 * 60)
 
 os.system("bsub {}".format(job_script_path))
