@@ -8,16 +8,16 @@
   "tokenizer-type": "HFTokenizer",
   "vocab-file": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/data/gpt2_tokenizer.json",
 
-  "save": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/roberta_base_mlm",
+  "save": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_base_mlm",
   # "load": "/gpfs/alpine/csc499/scratch/jerry.huang/neox_converted/mp1_pp1/pythia",
 
   "checkpoint_validation_with_forward_pass": False,
 
-  "tensorboard-dir": "tensorboard/roberta_base_mlm",
-  "log-dir": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/roberta_base_mlm",
+  "tensorboard-dir": "tensorboard/modified_roberta_base_mlm",
+  "log-dir": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/modified_roberta_base_mlm",
   "use_wandb": False,
   # "wandb_host": "https://api.wandb.ai",
-  "wandb_project": "roberta_base_mlm",
+  "wandb_project": "modified_roberta_base_mlm",
 
   "launcher": "jsrun",
   "deepspeed_jsrun": true,
