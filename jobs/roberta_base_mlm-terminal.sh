@@ -1,5 +1,5 @@
 #!/bin/bash
-#BSUB -nnodes 29
+#BSUB -nnodes 34
 #BSUB -W 2:00
 #BSUB -q batch
 #BSUB -o /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/roberta_base_mlm-%J.out
