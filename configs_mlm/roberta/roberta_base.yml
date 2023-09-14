@@ -87,26 +87,26 @@
 
   # logging
   "log-interval": 100,
-  "steps_per_print": 10,
+  "steps_per_print": 100,
   # "keep-last-n-checkpoints": 4,
   "wall_clock_breakdown": true,
 
   # Log metrics
-  "log_grad_norm": true,
-  "log_param_norm": true,
+  #"log_grad_norm": true,
+  #"log_param_norm": true,
   #"log_optimizer_states": true,
-  "log_grad_pct_zeros": true,
+  #"log_grad_pct_zeros": true,
   #"log_gradient_noise_scale": true,
 
-  "save": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/roberta_base",
-  # "load": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/roberta_base",
+  "save": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/roberta_base_mlm",
+  # "load": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/roberta_base_mlm",
 
   #  networking
   # "hostfile": "/mock_path"
 
   # "use_wandb": true,
-  "wandb_group": "roberta_base",
-  "wandb_team": "jhuang265",
+  #"wandb_group": "roberta_base",
+  #"wandb_team": "jhuang265",
 
   "identifier_string": "roberta_base_mlm"
 }
