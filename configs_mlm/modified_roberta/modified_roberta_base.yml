@@ -16,7 +16,7 @@
   "no-weight-tying": true,
   "gpt_j_residual": false,
   "output_layer_parallelism": "column",
-  "activation": "swiglu",
+  "activation": "geglu",
 
   # these should provide some speedup but takes a while to build, set to true if desired
   "scaled-upper-triang-masked-softmax-fusion": false,
@@ -25,7 +25,7 @@
   # init methods
   "init_method": "small_init",
   "output_layer_init_method": "wang_init",
-  "small_init_embedding": true,
+  #"small_init_embedding": true,
 
   # optimizer settings
   "optimizer": {

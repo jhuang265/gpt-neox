@@ -1,9 +1,9 @@
 #!/bin/bash
-#BSUB -nnodes 87
-#BSUB -W 6:00
+#BSUB -nnodes 171
+#BSUB -W 12:00
 #BSUB -q batch
-#BSUB -o /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/modified_roberta_base_2048_mlm-%J.out
-#BSUB -e /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/modified_roberta_base_2048_mlm-%J.err
+#BSUB -o /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/modified_roberta_2048_base_mlm-%J.out
+#BSUB -e /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/modified_roberta_2048_base_mlm-%J.err
 #BSUB -J modified_roberta_base_2048_mlm
 #BSUB -alloc_flags gpudefault
 #BSUB -P CSC499
@@ -25,12 +25,6 @@ export TORCH_EXTENSIONS_DIR=/gpfs/alpine/csc499/scratch/jerry.huang/latest_insta
 export TRAIN_PATH=/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox
 cd $TRAIN_PATH
 
-# Kill previous job and setup next job pickup
-bkill {}
-python /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/launch_scripts/modified_roberta_base_2048_mlm_launch.py --job-id $LSB_JOBID &
-PYTHON_PID=$!
-echo "Hidden ID: $PYTHON_PID"
-
 # Write the hostfile for this job
 bash /gpfs/alpine/csc499/scratch/jerry.huang/write_hostfile.sh
 export DLTS_HOSTFILE=/gpfs/alpine/csc499/scratch/jerry.huang/hostfiles/$LSB_JOBID-hosts
@@ -40,8 +34,8 @@ echo -e "$LSB_JOBID" >> $TRAIN_PATH/info/$LSB_JOBNAME.info
 
 # Run
 python $TRAIN_PATH/deepy.py $TRAIN_PATH/train.py --conf_dir $TRAIN_PATH/configs_mlm \
-	setup/setup_modified_roberta_base_2048_resume.yml \
-	modified_roberta_2048/modified_roberta_base_2048.yml \
+        setup/setup_modified_roberta_2048_base_resume.yml \
+        modified_roberta_2048/modified_roberta_2048_base.yml \
 	datasets_ben/val/pile_slimp.yml \
 	datasets_ben/train/slim_pajama_606B.yml \
-	load_ben/modified_roberta_base_2048_mlm.yml \
+	load_ben/none.yml

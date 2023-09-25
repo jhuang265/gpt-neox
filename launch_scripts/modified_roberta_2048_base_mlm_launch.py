@@ -13,20 +13,20 @@ args = parser.parse_args()
 if not args.no_sleep:
   time.sleep(90 * 60)
 
-tmp = "\"/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_base_2048_mlm/\"".format(args.job_id)
+tmp = "\"/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_2048_base_mlm/\"".format(args.job_id)
 
 file_contents = "{\n\"load\":" + tmp + "\n}"
 
-with open("/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/configs_mlm/load_ben/modified_roberta_base_2048_mlm.yml",'w') as f:
+with open("/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/configs_mlm/load_ben/modified_roberta_2048_base_mlm.yml",'w') as f:
   f.write(file_contents)
 
 #Change job script
 job_script_contents="""#!/bin/bash
-#BSUB -nnodes 87
-#BSUB -W 6:00
+#BSUB -nnodes 171
+#BSUB -W 12:00
 #BSUB -q batch
-#BSUB -o /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/modified_roberta_base_2048_mlm-%J.out
-#BSUB -e /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/modified_roberta_base_2048_mlm-%J.err
+#BSUB -o /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/modified_roberta_2048_base_mlm-%J.out
+#BSUB -e /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/modified_roberta_2048_base_mlm-%J.err
 #BSUB -J modified_roberta_base_2048_mlm
 #BSUB -alloc_flags gpudefault
 #BSUB -P CSC499
@@ -50,7 +50,7 @@ cd $TRAIN_PATH
 
 # Kill previous job and setup next job pickup
 bkill {}
-python /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/launch_scripts/modified_roberta_base_2048_mlm_launch.py --job-id $LSB_JOBID &
+python /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/launch_scripts/modified_roberta_2048_base_mlm_launch.py --job-id $LSB_JOBID &
 PYTHON_PID=$!
 echo "Hidden ID: $PYTHON_PID"
 
@@ -63,19 +63,19 @@ echo -e "$LSB_JOBID" >> $TRAIN_PATH/info/$LSB_JOBNAME.info
 
 # Run
 python $TRAIN_PATH/deepy.py $TRAIN_PATH/train.py --conf_dir $TRAIN_PATH/configs_mlm \
-setup/setup_modified_roberta_base_2048_resume.yml \
-modified_roberta_2048/modified_roberta_base_2048.yml \
+setup/setup_modified_roberta_2048_base_resume.yml \
+modified_roberta_2048/modified_roberta_2048_base.yml \
 datasets_ben/val/pile_slimp.yml \
 datasets_ben/train/slim_pajama_606B.yml \
-load_ben/modified_roberta_base_2048_mlm.yml \
+load_ben/modified_roberta_2048_base_mlm.yml
 """.format(args.job_id, args.job_id)
 
-job_script_path = "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/jobs/modified_roberta_base_2048_mlm-recurring.sh"
+job_script_path = "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/jobs/modified_roberta_2048_base_mlm-recurring.sh"
 with open(job_script_path,'w') as f:
   f.write(job_script_contents)
 
 # sleep 4 hours before submitting a new job
 if not args.no_sleep:
-  time.sleep(4 * 60 * 60)
+  time.sleep(10.5 * 60 * 60)
 
 os.system("bsub {}".format(job_script_path))

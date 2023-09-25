@@ -51,7 +51,7 @@
   },
 
   # batch / data settings
-  "train_micro_batch_size_per_gpu": 16,
+  "train_micro_batch_size_per_gpu": 8,
   #"gradient_accumulation_steps": 1,
   "data-impl": "mmap",
 
@@ -100,15 +100,15 @@
   # "log_grad_pct_zeros": true,
   # "log_gradient_noise_scale": true,
 
-  "save": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_base_2048_mlm",
-  # "load": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_base_2048_mlm",
+  "save": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_2048_base_mlm",
+  # "load": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_2048_base_mlm",
 
   #  networking
   # "hostfile": "/mock_path"
 
   # "use_wandb": true,
-  "wandb_group": "modified_roberta_base_2048_mlm",
-  "wandb_team": "jhuang265",
+  # "wandb_group": "modified_roberta_2048_base_mlm",
+  # "wandb_team": "jhuang265",
 
-  "identifier_string": "modified_roberta_base_2048_mlm"
+  "identifier_string": "modified_roberta_2048_base_mlm"
 }
