@@ -4,7 +4,7 @@
 #BSUB -q debug
 #BSUB -o /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/test-modified_roberta_base_2048_mlm-%J.out
 #BSUB -e /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/test-modified_roberta_base_2048_mlm-%J.err
-#BSUB -J test-modified_roberta_base_2048_mlm
+#BSUB -J test-modified_roberta_2048_base_mlm
 #BSUB -alloc_flags gpudefault
 #BSUB -P CSC499
 #BSUB -N jerry.huang@mila.quebec

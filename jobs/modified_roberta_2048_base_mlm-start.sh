@@ -34,8 +34,8 @@ echo -e "$LSB_JOBID" >> $TRAIN_PATH/info/$LSB_JOBNAME.info
 
 # Run
 python $TRAIN_PATH/deepy.py $TRAIN_PATH/train.py --conf_dir $TRAIN_PATH/configs_mlm \
-        setup/setup_modified_roberta_2048_base_resume.yml \
-        modified_roberta_2048/modified_roberta_2048_base.yml \
+	setup/setup_modified_roberta_2048_base_resume.yml \
+	modified_roberta_2048/modified_roberta_2048_base.yml \
 	datasets_ben/val/pile_slimp.yml \
 	datasets_ben/train/slim_pajama_606B.yml \
 	load_ben/none.yml
