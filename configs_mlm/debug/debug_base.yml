@@ -1,0 +1,112 @@
+# GPT-2 pretraining setup
+{
+    # parallelism settings ( you will want to change these based on your cluster setup, ideally scheduling pipeline stages
+    # across the node boundaries )
+    "pipe-parallel-size": 1,
+    "model-parallel-size": 1,
+
+    # model settings
+    "num-layers": 12,
+    "hidden-size": 768,
+    "num-attention-heads": 12,
+    "seq-length": 512,
+    "max-position-embeddings": 514,
+    "norm": "layernorm",
+    "pos-emb": "learned",
+    "no-weight-tying": true,
+    "gpt_j_residual": false,
+    "output_layer_parallelism": "column",
+
+    # these should provide some speedup but takes a while to build, set to true if desired
+    "scaled-upper-triang-masked-softmax-fusion": false,
+    "bias-gelu-fusion": false,
+
+    # init methods
+    "init_method": "normal",
+    "output_layer_init_method": "normal",
+
+
+    # optimizer settings
+    "optimizer": {
+        "type": "Adam",
+        "params": {
+            "lr": 0.0006,
+            "betas": [0.9, 0.98],
+            "eps": 1.0e-6,
+        }
+    },
+    "min_lr": 0.0,
+
+    # for all zero_optimization options, see https://www.deepspeed.ai/docs/config-json/#zero-optimizations-for-fp16-training
+    "zero_optimization": {
+        "stage": 1,
+        "allgather_partitions": True,
+        "allgather_bucket_size": 500000000,
+        "overlap_comm": True,
+        "reduce_scatter": True,
+        "reduce_bucket_size": 500000000,
+        "contiguous_gradients": True,
+    },
+
+    # batch / data settings
+    "train_micro_batch_size_per_gpu": 4,
+    #"gradient_accumulation_steps": 1,
+    "data-impl": "mmap",
+
+    # activation checkpointing
+    "checkpoint-activations": true,
+    "checkpoint-num-layers": 1,
+    "partition-activations": true,
+    "synchronize-each-layer": true,
+
+    # regularization
+    "gradient_clipping": 0.0,
+    "weight-decay": 0.01,
+    "hidden-dropout": 0.1,
+    "attention-dropout": 0.1,
+
+    # precision settings
+    "fp16": {
+        "fp16": true,
+        "enabled": true,
+        "loss_scale": 0,
+        "loss_scale_window": 1000,
+        "hysteresis": 2,
+        "min_loss_scale": 1
+    },
+
+    # misc. training settings
+    "train-iters": 10,
+    "lr-decay-iters": 5,
+    "distributed-backend": "nccl",
+    "lr-decay-style": "linear",
+    "warmup": 0.048,
+    "checkpoint-factor": 1000,
+    "eval-interval": 1000,
+    "eval-iters": 10,
+
+    # logging
+    "log-interval": 1,
+    "steps_per_print": 1,
+    # "keep-last-n-checkpoints": 4,
+    "wall_clock_breakdown": true,
+
+    # Log metrics
+    #"log_grad_norm": true,
+    #"log_param_norm": true,
+    #"log_optimizer_states": true,
+    #"log_grad_pct_zeros": true,
+    #"log_gradient_noise_scale": true,
+
+    "save": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/debug_mlm",
+    # "load": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/debug_mlm",
+
+    #  networking
+    # "hostfile": "/mock_path"
+
+    # "use_wandb": true,
+    #"wandb_group": "debug_mlm",
+    #"wandb_team": "jhuang265",
+
+    "identifier_string": "debug_mlm"
+}

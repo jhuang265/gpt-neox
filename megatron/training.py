@@ -332,6 +332,9 @@ def _get_batch_mlm(neox_args, tokenizer, keys, data, datatype):
     # Unpack.
     tokens_ = data_b["text"].long()
 
+    if neox_args.debug:
+        print(tokens)
+
     # create two sample vectors
     cls_tokens = torch.full((tokens.shape[0], 1), neox_args.tokenizer.cls)
     eod_tokens = torch.full((tokens.shape[0], 1), neox_args.tokenizer.eod)
@@ -350,6 +353,11 @@ def _get_batch_mlm(neox_args, tokenizer, keys, data, datatype):
         vocab_size=neox_args.tokenizer.vocab_size,
         eod_mask_loss=neox_args.eod_mask_loss,
     )
+
+    if neox_args.debug:
+        print(attention_mask)
+        print(loss_mask)
+        print(position_ids)
 
     return tokens, labels, loss_mask, attention_mask, position_ids
 

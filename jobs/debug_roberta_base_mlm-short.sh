@@ -29,4 +29,4 @@ cd $TRAIN_PATH
 bash /gpfs/alpine/csc499/scratch/jerry.huang/write_hostfile.sh
 export DLTS_HOSTFILE=/gpfs/alpine/csc499/scratch/jerry.huang/hostfiles/$LSB_JOBID-hosts
 
-python $TRAIN_PATH/deepy.py $TRAIN_PATH/train.py --conf_dir $TRAIN_PATH/configs_mlm setup/setup_roberta_base_resume.yml roberta/roberta_base.yml datasets_ben/val/slimp.yml datasets_ben/train/slim_pajama_606B.yml load_ben/none.yml 
+python $TRAIN_PATH/deepy.py $TRAIN_PATH/train.py --conf_dir $TRAIN_PATH/configs_mlm setup/setup_debug.yml debug/debug_base.yml datasets_ben/val/slimp.yml datasets_ben/train/slim_pajama_606B.yml load_ben/none.yml 
