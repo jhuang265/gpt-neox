@@ -159,8 +159,9 @@ class _GPT2BPETokenizer(AbstractTokenizer):
         )
         self.eod_id = self.tokenizer.encoder["<|endoftext|>"]
         self.mask_id = self.tokenizer.encoder("<|mask|>")
-        self.cls_id = self.tokenizer.encoder("<|begoftext|>")
+        self.cls_id = self.tokenizer.encoder("<|cls|>")
         self.sep_id = self.tokenizer.encoder("<|sep|>")
+        self.pad_id = self.tokenizer.encoder("<|padding|>")
 
     @property
     def vocab_size(self):
@@ -189,6 +190,10 @@ class _GPT2BPETokenizer(AbstractTokenizer):
         return self.mask_id
 
     @property
+    def pad(self):
+        return self.pad_id
+
+    @property
     def cls(self):
         return self.cls_id
 
@@ -209,6 +214,7 @@ class SentencePieceTokenizer(AbstractTokenizer):
         self.cls_id = self.tokenizer.piece_to_id("<|cls|>")
         self.sep_id = self.tokenizer.piece_to_id("<|sep|>")
         self.mask_id = self.tokenizer.piece_to_id("<|mask|>")
+        self.pad_id = self.tokenizer.piece_to_id("<|padding|>")
 
     @property
     def vocab_size(self):
@@ -237,6 +243,22 @@ class SentencePieceTokenizer(AbstractTokenizer):
     @property
     def eod(self):
         return self.eod_id
+
+    @property
+    def mask(self):
+        return self.mask_id
+
+    @property
+    def pad(self):
+        return self.pad_id
+
+    @property
+    def cls(self):
+        return self.cls_id
+
+    @property
+    def sep(self):
+        return self.sep_id
 
 
 class HFTokenizer(AbstractTokenizer):
@@ -278,6 +300,22 @@ class HFTokenizer(AbstractTokenizer):
     def eod(self):
         return self.eod_id
 
+    @property
+    def cls(self):
+        return self.cls_id
+
+    @property
+    def sep(self):
+        return self.sep_id
+
+    @property
+    def mask(self):
+        return self.mask_id
+
+    @property
+    def pad(self):
+        return self.pad_id
+
 
 class HFGPT2Tokenizer(AbstractTokenizer):
     """Designed to Integrate the pretrained OpenAI GPT2 Tokenizers from HF"""
@@ -294,9 +332,19 @@ class HFGPT2Tokenizer(AbstractTokenizer):
         else:
             self.tokenizer = GPT2Tokenizer.from_pretrained(vocab_file)
 
-        self.tokenizer.add_special_tokens({"pad_token": "<|padding|>"})
+        self.tokenizer.add_special_tokens(
+            {
+                "pad_token": "<|padding|>",
+                "mask_token": "<|mask|>",
+                "sep_token": "<|sep|>",
+                "cls_token": "<|cls|>",
+            }
+        )
         self.eod_id = self.tokenizer.eos_token_id
         self.pad_id = self.tokenizer.pad_token_id
+        self.cls_id = self.tokenizer.cls_token_id
+        self.mask_id = self.tokenizer.mask_token_id
+        self.sep_id = self.tokenizer.sep_token_id
 
     @property
     def vocab_size(self):
@@ -324,6 +372,22 @@ class HFGPT2Tokenizer(AbstractTokenizer):
     @property
     def eod(self):
         return self.eod_id
+
+    @property
+    def cls(self):
+        return self.cls_id
+
+    @property
+    def sep(self):
+        return self.sep_id
+
+    @property
+    def mask(self):
+        return self.mask_id
+
+    @property
+    def pad(self):
+        return self.pad_id
 
 
 class CharLevelTokenizer(AbstractTokenizer):

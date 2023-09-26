@@ -2,9 +2,9 @@
 #BSUB -nnodes 2
 #BSUB -W 0:30
 #BSUB -q batch
-#BSUB -o /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/debug_roberta_base_mlm-short-%J.out
-#BSUB -e /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/debug_roberta_base_mlm-short-%J.err
-#BSUB -J debug_roberta_base_mlm-short
+#BSUB -o /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/debug-mlm-%J.out
+#BSUB -e /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/debug-mlm-%J.err
+#BSUB -J debug-mlm
 #BSUB -alloc_flags gpudefault
 #BSUB -P CSC499
 #BSUB -N jerry.huang@mila.quebec

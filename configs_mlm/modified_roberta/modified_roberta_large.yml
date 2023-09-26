@@ -1,109 +1,109 @@
 # GPT-2 pretraining setup
 {
-  # parallelism settings ( you will want to change these based on your cluster setup, ideally scheduling pipeline stages
-  # across the node boundaries )
-  "pipe-parallel-size": 1,
-  "model-parallel-size": 1,
+    # parallelism settings ( you will want to change these based on your cluster setup, ideally scheduling pipeline stages
+    # across the node boundaries )
+    "pipe-parallel-size": 1,
+    "model-parallel-size": 1,
 
-  # model settings
-  "num-layers": 24,
-  "hidden-size": 1024,
-  "num-attention-heads": 16,
-  "seq-length": 512,
-  "max-position-embeddings": 512,
-  "norm": "layernorm",
-  "pos-emb": "rotary",
-  "no-weight-tying": true,
-  "gpt_j_residual": false,
-  "output_layer_parallelism": "column",
-  "activation": "swiglu",
+    # model settings
+    "num-layers": 24,
+    "hidden-size": 1024,
+    "num-attention-heads": 16,
+    "seq-length": 512,
+    "max-position-embeddings": 514,
+    "norm": "layernorm",
+    "pos-emb": "rotary",
+    "no-weight-tying": true,
+    "gpt_j_residual": false,
+    "output_layer_parallelism": "column",
+    "activation": "swiglu",
 
-  # these should provide some speedup but takes a while to build, set to true if desired
-  "scaled-upper-triang-masked-softmax-fusion": false,
-  "bias-gelu-fusion": false,
+    # these should provide some speedup but takes a while to build, set to true if desired
+    "scaled-upper-triang-masked-softmax-fusion": false,
+    "bias-gelu-fusion": false,
 
-  # init methods
-  "init_method": "small_init",
-  "output_layer_init_method": "wang_init",
-  "small_init_embedding": true,
+    # init methods
+    "init_method": "small_init",
+    "output_layer_init_method": "wang_init",
+    "small_init_embedding": true,
 
-  # optimizer settings
-  "optimizer": {
-    "type": "Adam",
-    "params": {
-      "lr": 0.0004,
-      "betas": [0.9, 0.98],
-      "eps": 1.0e-6,
-      "adam_w_mode": true
-    }
-  },
-  "min_lr": 0.00000,
+    # optimizer settings
+    "optimizer": {
+        "type": "Adam",
+        "params": {
+            "lr": 0.0004,
+            "betas": [0.9, 0.98],
+            "eps": 1.0e-6,
+            "adam_w_mode": true
+        }
+    },
+    "min_lr": 0.00000,
 
-  # for all zero_optimization options, see https://www.deepspeed.ai/docs/config-json/#zero-optimizations-for-fp16-training
-  "zero_optimization": {
-  "stage": 1,
-  "allgather_partitions": True,
-  "allgather_bucket_size": 500000000,
-  "overlap_comm": True,
-  "reduce_scatter": True,
-  "reduce_bucket_size": 500000000,
-  "contiguous_gradients": True,
-},
-  # batch / data settings
-  "train_micro_batch_size_per_gpu": 48,
-  "data-impl": "mmap",
+    # for all zero_optimization options, see https://www.deepspeed.ai/docs/config-json/#zero-optimizations-for-fp16-training
+    "zero_optimization": {
+        "stage": 1,
+        "allgather_partitions": True,
+        "allgather_bucket_size": 500000000,
+        "overlap_comm": True,
+        "reduce_scatter": True,
+        "reduce_bucket_size": 500000000,
+        "contiguous_gradients": True,
+    },
+    # batch / data settings
+    "train_micro_batch_size_per_gpu": 48,
+    "data-impl": "mmap",
 
-  # activation checkpointing
-  "checkpoint-activations": true,
-  "checkpoint-num-layers": 1,
-  "partition-activations": true,
-  "synchronize-each-layer": true,
+    # activation checkpointing
+    "checkpoint-activations": true,
+    "checkpoint-num-layers": 1,
+    "partition-activations": true,
+    "synchronize-each-layer": true,
 
-  # regularization
-  "gradient_clipping": 0.0,
-  "weight-decay": 0.01,
-  "hidden-dropout": 0.1,
-  "attention-dropout": 0.1,
+    # regularization
+    "gradient_clipping": 0.0,
+    "weight-decay": 0.01,
+    "hidden-dropout": 0.1,
+    "attention-dropout": 0.1,
 
-  # precision settings
-  "fp16": {
-    "fp16": true,
-    "enabled": true,
-    "loss_scale": 0,
-    "loss_scale_window": 1000,
-    "hysteresis": 2,
-    "min_loss_scale": 1
-  },
+    # precision settings
+    "fp16": {
+        "fp16": true,
+        "enabled": true,
+        "loss_scale": 0,
+        "loss_scale_window": 1000,
+        "hysteresis": 2,
+        "min_loss_scale": 1
+    },
 
-  # misc. training settings
-  "train-iters": 500000,
-  "lr-decay-iters": 500000,
-  "distributed-backend": "nccl",
-  "lr-decay-style": "linear",
-  "warmup": 0.06,
-  "checkpoint-factor": 1000,
-  "eval-interval": 1000,
-  "eval-iters": 10,
+    # misc. training settings
+    "train-iters": 500000,
+    "lr-decay-iters": 500000,
+    "distributed-backend": "nccl",
+    "lr-decay-style": "linear",
+    "warmup": 0.06,
+    "checkpoint-factor": 1000,
+    "eval-interval": 1000,
+    "eval-iters": 10,
 
-  # logging
-  "log-interval": 100,
-  "steps_per_print": 10,
-  # "keep-last-n-checkpoints": 4,
-  "wall_clock_breakdown": true,
+    # logging
+    "log-interval": 100,
+    "steps_per_print": 10,
+    # "keep-last-n-checkpoints": 4,
+    "wall_clock_breakdown": true,
 
-  # Log metrics
-  "log_grad_norm": true,
-  "log_param_norm": true,
-  #"log_optimizer_states": true,
-  "log_grad_pct_zeros": true,
-  #"log_gradient_noise_scale": true,
+    # Log metrics
+    "log_grad_norm": true,
+    "log_param_norm": true,
+    #"log_optimizer_states": true,
+    "log_grad_pct_zeros": true,
+    #"log_gradient_noise_scale": true,
 
-  "save": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_large",
-  # "load": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_large",
+    "save": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_large",
+    # "load": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_large",
 
-  # "use_wandb": true,
-  "wandb_group": "modified_roberta_large",
-  "wandb_team": "jhuang265",
+    # "use_wandb": true,
+    "wandb_group": "modified_roberta_large",
+    "wandb_team": "jhuang265",
 
-  "identifier_string": "modified_roberta_large_mlm"
+    "identifier_string": "modified_roberta_large_mlm"
 }

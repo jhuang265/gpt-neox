@@ -119,6 +119,7 @@ def get_attn_mask_mlm(seq_length, device):
 
 def get_ltor_masks_and_position_ids_mlm(
     data,
+    cls_token,
     eod_token,
     mask_token,
     vocab_size,
@@ -137,7 +138,7 @@ def get_ltor_masks_and_position_ids_mlm(
     )
 
     probability_matrix = torch.full(data.shape, mlm_probability, device=data.device)
-    special_tokens_mask = (data == eod_token)
+    special_tokens_mask = (data == eod_token or data == cls_token)
     probability_matrix.masked_fill_(special_tokens_mask, value=0.0)
     masked_indices = torch.bernoulli(probability_matrix).bool()
 
@@ -154,6 +155,7 @@ def get_ltor_masks_and_position_ids_mlm(
     loss_mask = torch.ones(data.size(), dtype=torch.float, device=data.device)
     loss_mask[data != mask_token] = 0.0
     loss_mask[data == eod_token] = 0.0
+    loss_mask[data == cls_token] = 0.0
 
     #if eod_mask_loss:
     #    loss_mask[data == eod_token] = 0.0

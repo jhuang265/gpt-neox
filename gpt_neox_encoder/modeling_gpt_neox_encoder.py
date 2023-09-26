@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-""" PyTorch GPTNeoX model."""
+""" PyTorch GPTNeoXEncoder model."""
 
 from typing import Optional, Tuple, Union
 
@@ -37,7 +37,7 @@ from tranformers.modeling_outputs import (
 )
 from tranformers.modeling_utils import PreTrainedModel
 from tranformers.utils import logging
-from tranformers.models.gpt_neox.configuration_gpt_neox import GPTNeoXConfig
+from .configuration_gpt_neox import GPTNeoXEncoderConfig
 
 
 logger = logging.get_logger(__name__)
@@ -52,16 +52,16 @@ GPT_NEOX_PRETRAINED_MODEL_ARCHIVE_LIST = [
 ]
 
 
-class GPTNeoXPreTrainedModel(PreTrainedModel):
+class GPTNeoXEncoderPreTrainedModel(PreTrainedModel):
     """
     An abstract class to handle weights initialization and a simple interface for downloading and loading pretrained
     models.
     """
 
-    config_class = GPTNeoXConfig
+    config_class = GPTNeoXEncoderConfig
     base_model_prefix = "gpt_neox"
     supports_gradient_checkpointing = True
-    _no_split_modules = ["GPTNeoXLayer"]
+    _no_split_modules = ["GPTNeoXEncoderLayer"]
     _skip_keys_device_placement = "past_key_values"
 
     def _init_weights(self, module):
@@ -79,11 +79,11 @@ class GPTNeoXPreTrainedModel(PreTrainedModel):
             module.weight.data.fill_(1.0)
 
     def _set_gradient_checkpointing(self, module, value=False):
-        if isinstance(module, GPTNeoXModel):
+        if isinstance(module, GPTNeoXEncoderModel):
             module.gradient_checkpointing = value
 
 
-class GPTNeoXAttention(nn.Module):
+class GPTNeoXEncoderAttention(nn.Module):
     def __init__(self, config):
         super().__init__()
         self.config = config
@@ -119,21 +119,21 @@ class GPTNeoXAttention(nn.Module):
 
     def _init_rope(self):
         if self.config.rope_scaling is None:
-            self.rotary_emb = GPTNeoXRotaryEmbedding(
+            self.rotary_emb = GPTNeoXEncoderRotaryEmbedding(
                 self.rotary_ndims, self.config.max_position_embeddings, base=self.config.rotary_emb_base
             )
         else:
             scaling_type = self.config.rope_scaling["type"]
             scaling_factor = self.config.rope_scaling["factor"]
             if scaling_type == "linear":
-                self.rotary_emb = GPTNeoXLinearScalingRotaryEmbedding(
+                self.rotary_emb = GPTNeoXEncoderLinearScalingRotaryEmbedding(
                     self.rotary_ndims,
                     self.config.max_position_embeddings,
                     base=self.config.rotary_emb_base,
                     scaling_factor=scaling_factor,
                 )
             elif scaling_type == "dynamic":
-                self.rotary_emb = GPTNeoXDynamicNTKScalingRotaryEmbedding(
+                self.rotary_emb = GPTNeoXEncoderDynamicNTKScalingRotaryEmbedding(
                     self.rotary_ndims,
                     self.config.max_position_embeddings,
                     base=self.config.rotary_emb_base,
@@ -287,7 +287,7 @@ def attention_mask_func(attention_scores, ltor_mask):
     return attention_scores
 
 
-class GPTNeoXRotaryEmbedding(torch.nn.Module):
+class GPTNeoXEncoderRotaryEmbedding(torch.nn.Module):
     def __init__(self, dim, max_position_embeddings, base=10000, device=None):
         super().__init__()
 
@@ -317,8 +317,8 @@ class GPTNeoXRotaryEmbedding(torch.nn.Module):
         return self.cos_cached[:seq_len, ...].to(x.device), self.sin_cached[:seq_len, ...].to(x.device)
 
 
-class GPTNeoXLinearScalingRotaryEmbedding(GPTNeoXRotaryEmbedding):
-    """GPTNeoXRotaryEmbedding extended with linear scaling. Credits to the Reddit user /u/kaiokendev"""
+class GPTNeoXEncoderLinearScalingRotaryEmbedding(GPTNeoXEncoderRotaryEmbedding):
+    """GPTNeoXEncoderRotaryEmbedding extended with linear scaling. Credits to the Reddit user /u/kaiokendev"""
 
     def __init__(self, dim, max_position_embeddings, base=10000, device=None, scaling_factor=1.0):
         self.scaling_factor = scaling_factor
@@ -336,8 +336,8 @@ class GPTNeoXLinearScalingRotaryEmbedding(GPTNeoXRotaryEmbedding):
         self.sin_cached = emb.sin()[None, None, :, :]
 
 
-class GPTNeoXDynamicNTKScalingRotaryEmbedding(GPTNeoXRotaryEmbedding):
-    """GPTNeoXRotaryEmbedding extended with Dynamic NTK scaling. Credits to the Reddit users /u/bloc97 and /u/emozilla"""
+class GPTNeoXEncoderDynamicNTKScalingRotaryEmbedding(GPTNeoXEncoderRotaryEmbedding):
+    """GPTNeoXEncoderRotaryEmbedding extended with Dynamic NTK scaling. Credits to the Reddit users /u/bloc97 and /u/emozilla"""
 
     def __init__(self, dim, max_position_embeddings, base=10000, device=None, scaling_factor=1.0):
         self.scaling_factor = scaling_factor
@@ -379,7 +379,7 @@ def apply_rotary_pos_emb(q, k, cos, sin, position_ids):
     return q_embed, k_embed
 
 
-class GPTNeoXMLP(nn.Module):
+class GPTNeoXEncoderMLP(nn.Module):
     def __init__(self, config):
         super().__init__()
         self.dense_h_to_4h = nn.Linear(config.hidden_size, config.intermediate_size)
@@ -393,7 +393,7 @@ class GPTNeoXMLP(nn.Module):
         return hidden_states
 
 
-class GPTNeoXLayer(nn.Module):
+class GPTNeoXEncoderLayer(nn.Module):
     def __init__(self, config):
         super().__init__()
         self.use_parallel_residual = config.use_parallel_residual
@@ -401,8 +401,8 @@ class GPTNeoXLayer(nn.Module):
         self.post_attention_layernorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
         self.post_attention_dropout = nn.Dropout(config.hidden_dropout)
         self.post_mlp_dropout = nn.Dropout(config.hidden_dropout)
-        self.attention = GPTNeoXAttention(config)
-        self.mlp = GPTNeoXMLP(config)
+        self.attention = GPTNeoXEncoderAttention(config)
+        self.mlp = GPTNeoXEncoderMLP(config)
 
     def forward(
         self,
@@ -456,7 +456,7 @@ GPT_NEOX_START_DOCSTRING = r"""
     behavior.
 
     Parameters:
-        config ([`~GPTNeoXConfig`]): Model configuration class with all the parameters of the model.
+        config ([`~GPTNeoXEncoderConfig`]): Model configuration class with all the parameters of the model.
             Initializing with a config file does not load the weights associated with the model, only the
             configuration. Check out the [`~PreTrainedModel.from_pretrained`] method to load the model weights.
 """
@@ -504,17 +504,17 @@ GPT_NEOX_INPUTS_DOCSTRING = r"""
 
 
 @add_start_docstrings(
-    "The bare GPTNeoX Model transformer outputting raw hidden-states without any specific head on top.",
+    "The bare GPTNeoXEncoder Model transformer outputting raw hidden-states without any specific head on top.",
     GPT_NEOX_START_DOCSTRING,
 )
-class GPTNeoXModel(GPTNeoXPreTrainedModel):
+class GPTNeoXEncoderModel(GPTNeoXEncoderPreTrainedModel):
     def __init__(self, config):
         super().__init__(config)
         self.config = config
 
         self.embed_in = nn.Embedding(config.vocab_size, config.hidden_size)
         self.emb_dropout = nn.Dropout(config.hidden_dropout)
-        self.layers = nn.ModuleList([GPTNeoXLayer(config) for _ in range(config.num_hidden_layers)])
+        self.layers = nn.ModuleList([GPTNeoXEncoderLayer(config) for _ in range(config.num_hidden_layers)])
         self.final_layer_norm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
 
         self.gradient_checkpointing = False
@@ -684,15 +684,15 @@ class GPTNeoXModel(GPTNeoXPreTrainedModel):
 
 
 @add_start_docstrings(
-    """GPTNeoX Model with a `language modeling` head on top for CLM fine-tuning.""", GPT_NEOX_START_DOCSTRING
+    """GPTNeoXEncoder Model with a `language modeling` head on top for CLM fine-tuning.""", GPT_NEOX_START_DOCSTRING
 )
-class GPTNeoXForCausalLM(GPTNeoXPreTrainedModel):
+class GPTNeoXEncoderForCausalLM(GPTNeoXEncoderPreTrainedModel):
     _tied_weights_keys = ["embed_out.weight"]
 
     def __init__(self, config):
         super().__init__(config)
 
-        self.gpt_neox = GPTNeoXModel(config)
+        self.gpt_neox = GPTNeoXEncoderModel(config)
         self.embed_out = nn.Linear(config.hidden_size, config.vocab_size, bias=False)
 
         # Initialize weights and apply final processing
@@ -746,13 +746,13 @@ class GPTNeoXForCausalLM(GPTNeoXPreTrainedModel):
         Example:
 
         ```python
-        >>> from transformers import AutoTokenizer, GPTNeoXForCausalLM, GPTNeoXConfig
+        >>> from transformers import AutoTokenizer, GPTNeoXEncoderForCausalLM, GPTNeoXEncoderConfig
         >>> import torch
 
         >>> tokenizer = AutoTokenizer.from_pretrained("EleutherAI/gpt-neox-20b")
-        >>> config = GPTNeoXConfig.from_pretrained("EleutherAI/gpt-neox-20b")
+        >>> config = GPTNeoXEncoderConfig.from_pretrained("EleutherAI/gpt-neox-20b")
         >>> config.is_decoder = True
-        >>> model = GPTNeoXForCausalLM.from_pretrained("EleutherAI/gpt-neox-20b", config=config)
+        >>> model = GPTNeoXEncoderForCausalLM.from_pretrained("EleutherAI/gpt-neox-20b", config=config)
 
         >>> inputs = tokenizer("Hello, my dog is cute", return_tensors="pt")
         >>> outputs = model(**inputs)
@@ -847,9 +847,9 @@ class GPTNeoXForCausalLM(GPTNeoXPreTrainedModel):
 
 @add_start_docstrings(
     """
-    The GPTNeoX Model transformer with a sequence classification head on top (linear layer).
+    The GPTNeoXEncoder Model transformer with a sequence classification head on top (linear layer).
 
-    [`GPTNeoXForSequenceClassification`] uses the last token in order to do the classification, as other causal models
+    [`GPTNeoXEncoderForSequenceClassification`] uses the last token in order to do the classification, as other causal models
     (e.g. GPT-1) do.
 
     Since it does classification on the last token, it requires to know the position of the last token. If a
@@ -860,11 +860,11 @@ class GPTNeoXForCausalLM(GPTNeoXPreTrainedModel):
     """,
     GPT_NEOX_START_DOCSTRING,
 )
-class GPTNeoXForSequenceClassification(GPTNeoXPreTrainedModel):
+class GPTNeoXEncoderForSequenceClassification(GPTNeoXEncoderPreTrainedModel):
     def __init__(self, config):
         super().__init__(config)
         self.num_labels = config.num_labels
-        self.gpt_neox = GPTNeoXModel(config)
+        self.gpt_neox = GPTNeoXEncoderModel(config)
         self.score = nn.Linear(config.hidden_size, self.num_labels, bias=False)
 
         # Initialize weights and apply final processing
@@ -972,12 +972,12 @@ class GPTNeoXForSequenceClassification(GPTNeoXPreTrainedModel):
         )
 
 
-class GPTNeoXForTokenClassification(GPTNeoXPreTrainedModel):
+class GPTNeoXEncoderForTokenClassification(GPTNeoXEncoderPreTrainedModel):
     def __init__(self, config):
         super().__init__(config)
         self.num_labels = config.num_labels
 
-        self.gpt_neox = GPTNeoXModel(config)
+        self.gpt_neox = GPTNeoXEncoderModel(config)
         self.dropout = nn.Dropout(config.classifier_dropout)
         self.classifier = nn.Linear(config.hidden_size, config.num_labels)
 
@@ -1056,11 +1056,11 @@ class GPTNeoXForTokenClassification(GPTNeoXPreTrainedModel):
     """,
     GPT_NEOX_START_DOCSTRING,
 )
-class GPTNeoXForQuestionAnswering(GPTNeoXPreTrainedModel):
+class GPTNeoXEncoderForQuestionAnswering(GPTNeoXEncoderPreTrainedModel):
     def __init__(self, config):
         super().__init__(config)
         self.num_labels = config.num_labels
-        self.gpt_neox = GPTNeoXModel(config)
+        self.gpt_neox = GPTNeoXEncoderModel(config)
         self.qa_outputs = nn.Linear(config.hidden_size, 2)
 
         # Initialize weights and apply final processing
