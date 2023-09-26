@@ -1,1 +1,1 @@
-tensorboard --logdir gpt-neox/tensorboard --port 3999 
+tensorboard --logdir tensorboard/roberta_base_mlm --port 3999 

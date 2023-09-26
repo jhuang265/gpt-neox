@@ -26,7 +26,7 @@ export TRAIN_PATH=/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox
 cd $TRAIN_PATH
 
 # Kill previous job and setup next job pickup
-bkill 3175686
+bkill 3177623
 python /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/launch_scripts/modified_roberta_base_mlm_launch.py --job-id $LSB_JOBID &
 PYTHON_PID=$!
 echo "Hidden ID: $PYTHON_PID"

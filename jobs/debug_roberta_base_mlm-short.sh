@@ -1,7 +1,7 @@
 #!/bin/bash
 #BSUB -nnodes 2
 #BSUB -W 0:30
-#BSUB -q batch
+#BSUB -q debug
 #BSUB -o /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/debug-mlm-%J.out
 #BSUB -e /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/debug-mlm-%J.err
 #BSUB -J debug-mlm
