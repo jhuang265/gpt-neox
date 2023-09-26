@@ -158,6 +158,9 @@ class _GPT2BPETokenizer(AbstractTokenizer):
             vocab_file, merge_file, errors="replace", special_tokens=[], max_len=None
         )
         self.eod_id = self.tokenizer.encoder["<|endoftext|>"]
+        self.mask_id = self.tokenizer.encoder("<|mask|>")
+        self.cls_id = self.tokenizer.encoder("<|begoftext|>")
+        self.sep_id = self.tokenizer.encoder("<|sep|>")
 
     @property
     def vocab_size(self):
@@ -181,6 +184,18 @@ class _GPT2BPETokenizer(AbstractTokenizer):
     def eod(self):
         return self.eod_id
 
+    @property
+    def mask(self):
+        return self.mask_id
+
+    @property
+    def cls(self):
+        return self.cls_id
+
+    @property
+    def sep(self):
+        return self.sep_id
+
 
 class SentencePieceTokenizer(AbstractTokenizer):
     """Designed to Integrate SP's Tokenizer."""
@@ -191,6 +206,9 @@ class SentencePieceTokenizer(AbstractTokenizer):
 
         self.tokenizer = spm.SentencePieceProcessor(model_file=vocab_file)
         self.eod_id = self.tokenizer.piece_to_id("<|endoftext|>")
+        self.cls_id = self.tokenizer.piece_to_id("<|cls|>")
+        self.sep_id = self.tokenizer.piece_to_id("<|sep|>")
+        self.mask_id = self.tokenizer.piece_to_id("<|mask|>")
 
     @property
     def vocab_size(self):
@@ -229,6 +247,9 @@ class HFTokenizer(AbstractTokenizer):
         super().__init__(name)
 
         self.tokenizer = Tokenizer.from_file(vocab_file)
+        self.cls_id = self.tokenizer.token_to_id("<|cls|>")
+        self.sep_id = self.tokenizer.token_to_id("<|sep|>")
+        self.mask_id = self.tokenizer.token_to_id("<|mask|>")
         self.eod_id = self.tokenizer.token_to_id("<|endoftext|>")
         self.pad_id = self.tokenizer.token_to_id("<|padding|>")
 
