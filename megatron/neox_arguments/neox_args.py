@@ -786,6 +786,11 @@ class NeoXArgsTraining(NeoXArgsTemplate):
     Warm up mmap files.
     """
 
+    debug: bool = False
+    """
+    Whether or not to print out debugging statements.
+    """
+
     save: str = None
     """
     Output directory to save checkpoints to.
