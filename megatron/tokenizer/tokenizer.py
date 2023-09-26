@@ -158,10 +158,10 @@ class _GPT2BPETokenizer(AbstractTokenizer):
             vocab_file, merge_file, errors="replace", special_tokens=[], max_len=None
         )
         self.eod_id = self.tokenizer.encoder["<|endoftext|>"]
-        self.mask_id = self.tokenizer.encoder("<|mask|>")
-        self.cls_id = self.tokenizer.encoder("<|cls|>")
-        self.sep_id = self.tokenizer.encoder("<|sep|>")
-        self.pad_id = self.tokenizer.encoder("<|padding|>")
+        self.mask_id = self.tokenizer.encoder["<|mask|>"]
+        self.cls_id = self.tokenizer.encoder["<|cls|>"]
+        self.sep_id = self.tokenizer.encoder["<|sep|>"]
+        self.pad_id = self.tokenizer.encoder["<|padding|>"]
 
     @property
     def vocab_size(self):
