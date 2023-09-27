@@ -2,8 +2,8 @@
 #BSUB -nnodes 92
 #BSUB -W 4:00
 #BSUB -q debug
-#BSUB -o /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/test-modified_roberta_2-7B_2048_mlm-%J.out
-#BSUB -e /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/test-modified_roberta_2-7B_2048_mlm-%J.err
+#BSUB -o /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/test-modified_roberta_2048_760M_mlm-%J.out
+#BSUB -e /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/test-modified_roberta_2048_760M_mlm-%J.err
 #BSUB -J test-modified_roberta_2048_760M_mlm
 #BSUB -alloc_flags gpudefault
 #BSUB -P CSC499
