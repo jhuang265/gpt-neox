@@ -35,7 +35,7 @@
             "adam_w_mode": true
         }
     },
-    "min_lr": 0.000016,
+    "min_lr": 0.00003,
 
     # for all zero_optimization options, see https://www.deepspeed.ai/docs/config-json/#zero-optimizations-for-fp16-training
     "zero_optimization": {
@@ -60,8 +60,8 @@
     "synchronize-each-layer": true,
 
     # regularization
-    "gradient_clipping": 0.0,
-    "weight-decay": 0.01,
+    "gradient_clipping": 1.0,
+    "weight-decay": 0.1,
     "hidden-dropout": 0.1,
     "attention-dropout": 0.1,
 
@@ -80,7 +80,7 @@
     "lr-decay-iters": 1000000,
     "distributed-backend": "nccl",
     "lr-decay-style": "cosine",
-    "warmup": 0.004,
+    "warmup": 0.005,
     "checkpoint-factor": 5000,
     "eval-interval": 1000,
     "eval-iters": 100,
