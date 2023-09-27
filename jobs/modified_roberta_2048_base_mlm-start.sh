@@ -30,6 +30,8 @@ bash /gpfs/alpine/csc499/scratch/jerry.huang/write_hostfile.sh
 export DLTS_HOSTFILE=/gpfs/alpine/csc499/scratch/jerry.huang/hostfiles/$LSB_JOBID-hosts
 
 # Write a file just to ensure we can track all jobs
+mkdir -p $TRAIN_PATH/info/
+touch $TRAIN_PATH/info/$LSB_JOBNAME.info
 echo -e "$LSB_JOBID" >> $TRAIN_PATH/info/$LSB_JOBNAME.info
 
 # Run
