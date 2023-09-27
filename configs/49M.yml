@@ -82,10 +82,10 @@
   "warmup": 0.01,
   "checkpoint-factor": 1000,
   "eval-interval": 100000,
-  "eval-iters": 10,
+  "eval-iters": 100,
 
   # logging
   "log-interval": 10,
-  "steps_per_print": 10,
+  "steps_per_print": 100,
   "wall_clock_breakdown": true,
 }

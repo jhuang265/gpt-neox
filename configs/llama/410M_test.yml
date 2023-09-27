@@ -85,7 +85,7 @@
   "checkpoint-factor": 1000,
   "eval-interval": 100,
   "warup-eval-interval": 50,
-  "eval-iters": 10,
+  "eval-iters": 100,
 
   # logging
   "log-interval": 1,

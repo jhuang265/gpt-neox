@@ -85,11 +85,11 @@ For a detailed list of all the arguments available for neox, see [neox_arguments
    "distributed-backend": "nccl",
    "save-interval": 10000,
    "eval-interval": 1000,
-   "eval-iters": 10,
+   "eval-iters": 100,
 
    # logging
-   "log-interval": 100,
-   "steps_per_print": 10,
+   "log-interval": 1000,
+   "steps_per_print": 100,
    "keep-last-n-checkpoints": 4,
    "wall_clock_breakdown": true,
 }
@@ -215,7 +215,7 @@ Our global batch size configuration follows deepspeed's and can be configured in
    "log-dir": "logs",
    "save-interval": 10000,
    "eval-interval": 1000,
-   "eval-iters": 10,
+   "eval-iters": 100,
 ```
 
 ### LR Scheduler settings

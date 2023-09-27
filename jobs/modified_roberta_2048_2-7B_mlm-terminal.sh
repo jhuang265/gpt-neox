@@ -1,6 +1,6 @@
 #!/bin/bash
-#BSUB -nnodes 29
-#BSUB -W 2:00
+#BSUB -nnodes 92
+#BSUB -W 12:00
 #BSUB -q batch
 #BSUB -o /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/modified_roberta_2048_2-7B_mlm-%J.out
 #BSUB -e /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/modified_roberta_2048_2-7B_mlm-%J.err

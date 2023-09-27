@@ -96,7 +96,7 @@
   "warmup": 0.01,
   "checkpoint-factor": 500, # this variable previously called `save-interval`
   "eval-interval": 1000,
-  "eval-iters": 10,
+  "eval-iters": 100,
 
   # logging
   "log-interval": 2,

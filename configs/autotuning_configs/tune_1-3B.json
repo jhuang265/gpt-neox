@@ -74,13 +74,13 @@
    "warmup": 0.01,
    "checkpoint-factor": 10000,
    "eval-interval": 1000,
-   "eval-iters": 10,
+   "eval-iters": 100,
    "launcher": "slurm",
    "deepspeed_slurm": true,
    "no_ssh_check": true,
 
    "log-interval": 10,
-   "steps_per_print": 10,
+   "steps_per_print": 100,
    "keep-last-n-checkpoints": 1,
    "wall_clock_breakdown": true
 }

@@ -9,8 +9,8 @@
     "num-layers": 24,
     "hidden-size": 1024,
     "num-attention-heads": 16,
-    "seq-length": 512,
-    "max-position-embeddings": 512,
+    "seq-length": 2046,
+    "max-position-embeddings": 2048,
     "norm": "layernorm",
     "pos-emb": "rotary",
     "no-weight-tying": true,
@@ -50,7 +50,7 @@
         "contiguous_gradients": True,
     },
     # batch / data settings
-    "train_micro_batch_size_per_gpu": 48,
+    "train_micro_batch_size_per_gpu": 16,
     "data-impl": "mmap",
 
     # activation checkpointing

@@ -75,10 +75,10 @@
   "checkpoint-factor": 1,
   "extra-save-iters": [0,1,2,4,8,16,32,64,128,256,512],
   "eval-interval": 100000,
-  "eval-iters": 10,
+  "eval-iters": 100,
 
   "log-interval": 10,
-  "steps_per_print": 10,
+  "steps_per_print": 100,
   "wall_clock_breakdown": true,
 
 

@@ -78,18 +78,18 @@
     },
 
     # misc. training settings
-    "train-iters": 500000,
-    "lr-decay-iters": 500000,
+    "train-iters": 1000000,
+    "lr-decay-iters": 1000000,
     "distributed-backend": "nccl",
-    "lr-decay-style": "linear",
-    "warmup": 0.048,
+    "lr-decay-style": "cosine",
+    "warmup": 0.004,
     "checkpoint-factor": 1000,
     "eval-interval": 1000,
-    "eval-iters": 10,
+    "eval-iters": 100,
 
     # logging
-    "log-interval": 100,
-    "steps_per_print": 10,
+    "log-interval": 1000,
+    "steps_per_print": 100,
     #"keep-last-n-checkpoints": 4,
     "wall_clock_breakdown": true,
 
