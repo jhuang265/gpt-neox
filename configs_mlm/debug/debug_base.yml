@@ -86,8 +86,8 @@
     "eval-iters": 1000,
 
     # logging
-    "log-interval": 1,
-    "steps_per_print": 1,
+    "log-interval": 100,
+    "steps_per_print": 100,
     # "keep-last-n-checkpoints": 4,
     "wall_clock_breakdown": true,
 

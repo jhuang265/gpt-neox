@@ -49,7 +49,7 @@
     },
 
     # batch / data settings
-    "train_micro_batch_size_per_gpu": 4,
+    "train_micro_batch_size_per_gpu": 8,
     #"gradient_accumulation_steps": 1,
     "data-impl": "mmap",
 
@@ -86,8 +86,8 @@
     "eval-iters": 1000,
 
     # logging
-    "log-interval": 1,
-    "steps_per_print": 1,
+    "log-interval": 10,
+    "steps_per_print": 10,
     # "keep-last-n-checkpoints": 4,
     "wall_clock_breakdown": true,
 
