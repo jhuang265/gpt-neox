@@ -332,17 +332,18 @@ def _get_batch_mlm(neox_args, tokenizer, keys, data, datatype):
     # Unpack.
     tokens_ = data_b["text"].long()
 
-    if neox_args.debug:
-        print(tokens)
+    # print('Tokens:', tokens_, tokens_.shape, flush=True)
 
     # create two sample vectors
-    cls_tokens = torch.full((tokens.shape[0], 1), neox_args.tokenizer.cls)
-    eod_tokens = torch.full((tokens.shape[0], 1), neox_args.tokenizer.eod)
+    # cls_tokens = torch.full((tokens_.shape[0], 1), neox_args.tokenizer.cls, device=tokens_.device)
+    # eod_tokens = torch.full((tokens_.shape[0], 1), neox_args.tokenizer.eod, device=tokens_.device)
+    # print('CLS:', neox_args.tokenizer.cls, 'EOD:', neox_args.tokenizer.eod, 'MASK:', neox_args.tokenizer.mask)
 
-    tokens_ = torch.cat((cls_tokens, tokens_, eod_tokens), axis=-1)
+    # tokens_ = torch.cat((cls_tokens, tokens_, eod_tokens), axis=-1)
+    # print('Tokens After:', tokens_, flush=True)
 
-    labels = tokens_[:, :].clone().contiguous()
-    tokens = tokens_[:, :].contiguous()
+    labels = tokens_[:, :-1].clone().contiguous()
+    tokens = tokens_[:, :-1].contiguous()
 
     # Get the masks and position ids
     attention_mask, loss_mask, position_ids = get_ltor_masks_and_position_ids_mlm(
@@ -354,10 +355,11 @@ def _get_batch_mlm(neox_args, tokenizer, keys, data, datatype):
         eod_mask_loss=neox_args.eod_mask_loss,
     )
 
-    if neox_args.debug:
-        print(attention_mask)
-        print(loss_mask)
-        print(position_ids)
+    # print('Tokens:', tokens)
+    # print('Labels:', labels)
+    # print('Attn Mask:', attention_mask)
+    # print('Loss Mask:', loss_mask)
+    # print('Pos IDs:', position_ids, position_ids.shape)
 
     return tokens, labels, loss_mask, attention_mask, position_ids
 
@@ -390,13 +392,13 @@ def get_batch_pipe(data, neox_args, curr_scheduler=None):
     keys = ["text"]
     datatype = torch.int64
 
-    tokens, labels, loss_mask, attention_mask, position_ids = _get_batch(
-        neox_args, neox_args.tokenizer, keys, data, datatype
-    )
-
-    # tokens, labels, loss_mask, attention_mask, position_ids = _get_batch_mlm(
+    # tokens, labels, loss_mask, attention_mask, position_ids = _get_batch(
     #     neox_args, neox_args.tokenizer, keys, data, datatype
     # )
+
+    tokens, labels, loss_mask, attention_mask, position_ids = _get_batch_mlm(
+        neox_args, neox_args.tokenizer, keys, data, datatype
+    )
     
     if curr_scheduler is not None:
         # iteration + 1 to align with how/when DeepSpeed updates the buffers

@@ -127,9 +127,11 @@ def get_ltor_masks_and_position_ids_mlm(
     eod_mask_loss=False,
 ):
     """Build masks and position id for left to right model."""
-
+    
     # Extract batch size and sequence length.
     batch_size, seq_length = data.size()
+
+    # print(vocab_size, cls_token, eod_token, mask_token, batch_size, seq_length)
 
     # Attention mask (lower triangular).
     attention_mask = get_attn_mask_mlm(
@@ -138,7 +140,7 @@ def get_ltor_masks_and_position_ids_mlm(
     )
 
     probability_matrix = torch.full(data.shape, mlm_probability, device=data.device)
-    special_tokens_mask = (data == eod_token or data == cls_token)
+    special_tokens_mask = torch.logical_and(data == eod_token, data == cls_token)
     probability_matrix.masked_fill_(special_tokens_mask, value=0.0)
     masked_indices = torch.bernoulli(probability_matrix).bool()
 
@@ -153,7 +155,7 @@ def get_ltor_masks_and_position_ids_mlm(
 
     # Loss mask.
     loss_mask = torch.ones(data.size(), dtype=torch.float, device=data.device)
-    loss_mask[data != mask_token] = 0.0
+    loss_mask[~masked_indices] = 0.0
     loss_mask[data == eod_token] = 0.0
     loss_mask[data == cls_token] = 0.0
 

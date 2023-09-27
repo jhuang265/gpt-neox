@@ -10,7 +10,7 @@
     "hidden-size": 768,
     "num-attention-heads": 12,
     "seq-length": 512,
-    "max-position-embeddings": 514,
+    "max-position-embeddings": 512,
     "norm": "layernorm",
     "pos-emb": "learned",
     "no-weight-tying": true,
@@ -76,14 +76,14 @@
     },
 
     # misc. training settings
-    "train-iters": 10,
-    "lr-decay-iters": 5,
+    "train-iters": 500000,
+    "lr-decay-iters": 5000,
     "distributed-backend": "nccl",
     "lr-decay-style": "linear",
     "warmup": 0.048,
     "checkpoint-factor": 1000,
     "eval-interval": 1000,
-    "eval-iters": 10,
+    "eval-iters": 1000,
 
     # logging
     "log-interval": 1,
