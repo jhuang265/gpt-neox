@@ -162,6 +162,7 @@ class _GPT2BPETokenizer(AbstractTokenizer):
         self.cls_id = self.tokenizer.encoder["<|cls|>"]
         self.sep_id = self.tokenizer.encoder["<|sep|>"]
         self.pad_id = self.tokenizer.encoder["<|padding|>"]
+        print(self.eod_id, self.cls_id, self.sep_id, self.mask_id, self.pad_id)
 
     @property
     def vocab_size(self):
@@ -215,6 +216,7 @@ class SentencePieceTokenizer(AbstractTokenizer):
         self.sep_id = self.tokenizer.piece_to_id("<|sep|>")
         self.mask_id = self.tokenizer.piece_to_id("<|mask|>")
         self.pad_id = self.tokenizer.piece_to_id("<|padding|>")
+        print(self.eod_id, self.cls_id, self.sep_id, self.mask_id, self.pad_id)
 
     @property
     def vocab_size(self):
@@ -274,6 +276,7 @@ class HFTokenizer(AbstractTokenizer):
         self.mask_id = self.tokenizer.token_to_id("<|mask|>")
         self.eod_id = self.tokenizer.token_to_id("<|endoftext|>")
         self.pad_id = self.tokenizer.token_to_id("<|padding|>")
+        print(self.eod_id, self.cls_id, self.sep_id, self.mask_id, self.pad_id)
 
     @property
     def vocab_size(self):
@@ -345,6 +348,7 @@ class HFGPT2Tokenizer(AbstractTokenizer):
         self.cls_id = self.tokenizer.cls_token_id
         self.mask_id = self.tokenizer.mask_token_id
         self.sep_id = self.tokenizer.sep_token_id
+        print(self.eod_id, self.cls_id, self.sep_id, self.mask_id, self.pad_id)
 
     @property
     def vocab_size(self):

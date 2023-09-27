@@ -6,6 +6,7 @@
   # "weighted_sampler_alpha": 0.3,
 
   "debug": true,
+  "with-tokens": true,
 
   #"tokenizer-type": "HFTokenizer",
   # "vocab-file": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/data/gpt2_tokenizer.json",
