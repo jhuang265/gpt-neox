@@ -791,6 +791,11 @@ class NeoXArgsTraining(NeoXArgsTemplate):
     Whether or not to print out debugging statements.
     """
 
+    with_tokens: bool = False
+    """
+    Whether or not to add CLS and EOS tokens for MLM.
+    """
+
     save: str = None
     """
     Output directory to save checkpoints to.

@@ -331,19 +331,21 @@ def _get_batch_mlm(neox_args, tokenizer, keys, data, datatype):
 
     # Unpack.
     tokens_ = data_b["text"].long()
+    tokens_ = tokens_[:, :-1]
 
-    # print('Tokens:', tokens_, tokens_.shape, flush=True)
+    if neox_args.with_tokens:
+        # print('Tokens:', tokens_, tokens_.shape, flush=True)
 
-    # create two sample vectors
-    # cls_tokens = torch.full((tokens_.shape[0], 1), neox_args.tokenizer.cls, device=tokens_.device)
-    # eod_tokens = torch.full((tokens_.shape[0], 1), neox_args.tokenizer.eod, device=tokens_.device)
-    # print('CLS:', neox_args.tokenizer.cls, 'EOD:', neox_args.tokenizer.eod, 'MASK:', neox_args.tokenizer.mask)
+        # create two sample vectors
+        cls_tokens = torch.full((tokens_.shape[0], 1), neox_args.tokenizer.cls, device=tokens_.device)
+        eod_tokens = torch.full((tokens_.shape[0], 1), neox_args.tokenizer.eod, device=tokens_.device)
+        # print('CLS:', neox_args.tokenizer.cls, 'EOD:', neox_args.tokenizer.eod, 'MASK:', neox_args.tokenizer.mask)
 
-    # tokens_ = torch.cat((cls_tokens, tokens_, eod_tokens), axis=-1)
-    # print('Tokens After:', tokens_, flush=True)
+        tokens_ = torch.cat((cls_tokens, tokens_, eod_tokens), axis=-1)
+        # print('Tokens After:', tokens_, flush=True)
 
-    labels = tokens_[:, :-1].clone().contiguous()
-    tokens = tokens_[:, :-1].contiguous()
+    labels = tokens_[:, :].clone().contiguous()
+    tokens = tokens_[:, :].contiguous()
 
     # Get the masks and position ids
     attention_mask, loss_mask, position_ids = get_ltor_masks_and_position_ids_mlm(
