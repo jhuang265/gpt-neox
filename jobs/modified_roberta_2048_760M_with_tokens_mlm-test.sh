@@ -4,7 +4,7 @@
 #BSUB -q debug
 #BSUB -o /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/test-modified_roberta_2-7B_2048_mlm-%J.out
 #BSUB -e /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/test-modified_roberta_2-7B_2048_mlm-%J.err
-#BSUB -J test-modified_roberta_2048_2-7B_mlm
+#BSUB -J test-modified_roberta_2048_760M_mlm
 #BSUB -alloc_flags gpudefault
 #BSUB -P CSC499
 #BSUB -N jerry.huang@mila.quebec
@@ -34,8 +34,8 @@ echo -e "$LSB_JOBID" >> $TRAIN_PATH/info/$LSB_JOBNAME.info
 
 # Run
 python $TRAIN_PATH/deepy.py $TRAIN_PATH/train.py --conf_dir $TRAIN_PATH/configs_mlm \
-	setup/setup_modified_roberta_2048_2-7B_resume.yml \
-	modified_roberta_2048/modified_roberta_2048_2-7B.yml \
+	setup/setup_modified_roberta_2048_760M_resume.yml \
+	modified_roberta_2048/modified_roberta_2048_760M.yml \
 	datasets_ben/val/pile_slimp.yml \
 	datasets_ben/train/slim_pajama_606B.yml \
 	load_ben/none.yml \
