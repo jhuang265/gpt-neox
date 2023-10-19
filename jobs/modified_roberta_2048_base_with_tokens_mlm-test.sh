@@ -1,7 +1,7 @@
 #!/bin/bash
-#BSUB -nnodes 46
+#BSUB -nnodes 92
 #BSUB -W 2:00
-#BSUB -q debug
+#BSUB -q batch
 #BSUB -o /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/test-modified_roberta_2048_base_with_tokens_mlm-%J.out
 #BSUB -e /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/test-modified_roberta_2048_base_with_tokens_mlm-%J.err
 #BSUB -J test-modified_roberta_2048_base_with_tokens_mlm
@@ -35,7 +35,7 @@ touch $TRAIN_PATH/info/$LSB_JOBNAME.info
 echo -e "$LSB_JOBID" >> $TRAIN_PATH/info/$LSB_JOBNAME.info
 
 # Run
-python $TRAIN_PATH/deepy.py $TRAIN_PATH/train.py --conf_dir $TRAIN_PATH/configs_with_tokens_mlm \
+python $TRAIN_PATH/deepy.py $TRAIN_PATH/train.py --conf_dir $TRAIN_PATH/configs_mlm \
 	setup/setup_modified_roberta_2048_base_resume.yml \
 	modified_roberta_2048/modified_roberta_2048_base.yml \
 	datasets_ben/val/pile_slimp.yml \

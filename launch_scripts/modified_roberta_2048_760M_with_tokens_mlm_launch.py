@@ -22,8 +22,8 @@ with open("/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/configs_mlm/load_ben
 
 #Change job script
 job_script_contents="""#!/bin/bash
-#BSUB -nnodes 92
-#BSUB -W 12:00
+#BSUB -nnodes 46
+#BSUB -W 6:00
 #BSUB -q batch
 #BSUB -o /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/modified_roberta_2048_760M_with_tokens_mlm-%J.out
 #BSUB -e /gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/logs/modified_roberta_2048_760M_with_tokens_mlm-%J.err
@@ -76,6 +76,6 @@ with open(job_script_path,'w') as f:
 
 # sleep 4 hours before submitting a new job
 if not args.no_sleep:
-  time.sleep(10.5 * 60 * 60)
+  time.sleep(4 * 60 * 60)
 
 os.system("bsub {}".format(job_script_path))

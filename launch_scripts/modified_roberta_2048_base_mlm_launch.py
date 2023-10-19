@@ -76,6 +76,6 @@ with open(job_script_path,'w') as f:
 
 # sleep 4 hours before submitting a new job
 if not args.no_sleep:
-  time.sleep(10.5 * 60 * 60)
+  time.sleep(4 * 60 * 60)
 
 os.system("bsub {}".format(job_script_path))
