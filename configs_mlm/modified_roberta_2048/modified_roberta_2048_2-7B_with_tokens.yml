@@ -3,12 +3,12 @@
     # parallelism settings ( you will want to change these based on your cluster setup, ideally scheduling pipeline stages
     # across the node boundaries )
     "pipe-parallel-size": 1,
-    "model-parallel-size": 1,
+    "model-parallel-size": 6,
 
     # model settings
     "num-layers": 32,
-    "hidden-size": 2560,
-    "num-attention-heads": 32,
+    "hidden-size": 3072,
+    "num-attention-heads": 24,
     "seq-length": 2046,
     "max-position-embeddings": 2048,
     "norm": "layernorm",
@@ -51,7 +51,7 @@
     },
 
     # batch / data settings
-    "train_micro_batch_size_per_gpu": 4,
+    "train_micro_batch_size_per_gpu": 8,
     #"gradient_accumulation_steps": 1,
     "data-impl": "mmap",
 
@@ -100,15 +100,15 @@
     # "log_grad_pct_zeros": true,
     # "log_gradient_noise_scale": true,
 
-    "save": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_2048_base_with_tokens_mlm",
-    # "load": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_2048_base_with_tokens_mlm",
+    "save": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_2048_2-7B_with_tokens_mlm",
+    # "load": "/gpfs/alpine/csc499/scratch/jerry.huang/gpt-neox/checkpoints/modified_roberta_2048_2-7B_with_tokens_mlm",
 
     #  networking
     # "hostfile": "/mock_path"
 
     # "use_wandb": true,
-    # "wandb_group": "modified_roberta_2048_base_with_tokens_mlm",
+    # "wandb_group": "modified_roberta_2048_2-7B_with_tokens_mlm",
     # "wandb_team": "jhuang265",
 
-    "identifier_string": "modified_roberta_2048_base_with_tokens_mlm"
+    "identifier_string": "modified_roberta_2048_2-7B_with_tokens_mlm"
 }
